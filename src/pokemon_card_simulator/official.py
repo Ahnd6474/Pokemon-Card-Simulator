@@ -25,6 +25,87 @@ SequenceChoiceFilter = Callable[
 ]
 PointFn = Callable[[Any, int, int], Point]
 
+STATE_FEATURE_NAMES = (
+    "turn_norm",
+    "your_index",
+    "result_known",
+    "result_self_win",
+    "result_opponent_win",
+    "supporter_played",
+    "stadium_played",
+    "energy_attached",
+    "retreated",
+    "turn_action_count_norm",
+    "select_type_norm",
+    "select_context_norm",
+    "select_option_count_norm",
+    "select_min_count_norm",
+    "select_max_count_norm",
+    "self_prize_remaining_norm",
+    "self_prize_taken_norm",
+    "self_deck_count_norm",
+    "self_hand_count_norm",
+    "self_discard_count_norm",
+    "self_active_count",
+    "self_bench_count_norm",
+    "self_in_play_count_norm",
+    "self_active_hp_norm",
+    "self_active_max_hp_norm",
+    "self_active_damage_norm",
+    "self_active_energy_norm",
+    "self_active_tool_norm",
+    "self_bench_hp_sum_norm",
+    "self_bench_damage_sum_norm",
+    "self_bench_energy_sum_norm",
+    "self_total_energy_norm",
+    "self_new_pokemon_norm",
+    "self_asleep",
+    "self_burned",
+    "self_confused",
+    "self_paralyzed",
+    "self_poisoned",
+    "opponent_prize_remaining_norm",
+    "opponent_prize_taken_norm",
+    "opponent_deck_count_norm",
+    "opponent_hand_count_norm",
+    "opponent_discard_count_norm",
+    "opponent_active_count",
+    "opponent_bench_count_norm",
+    "opponent_in_play_count_norm",
+    "opponent_active_hp_norm",
+    "opponent_active_max_hp_norm",
+    "opponent_active_damage_norm",
+    "opponent_active_energy_norm",
+    "opponent_active_tool_norm",
+    "opponent_bench_hp_sum_norm",
+    "opponent_bench_damage_sum_norm",
+    "opponent_bench_energy_sum_norm",
+    "opponent_total_energy_norm",
+    "opponent_new_pokemon_norm",
+    "opponent_asleep",
+    "opponent_burned",
+    "opponent_confused",
+    "opponent_paralyzed",
+    "opponent_poisoned",
+)
+
+CARD_OWNER_NAMES = ("self", "opponent")
+CARD_ZONE_NAMES = ("hand", "active", "bench", "discard", "attached_energy", "tool", "pre_evolution")
+CARD_INSTANCE_FEATURE_NAMES = (
+    "hp_norm",
+    "max_hp_norm",
+    "damage_norm",
+    "energy_count_norm",
+    "tool_count_norm",
+    "evolution_depth_norm",
+    "appear_this_turn",
+    "status_asleep",
+    "status_burned",
+    "status_confused",
+    "status_paralyzed",
+    "status_poisoned",
+)
+
 
 @dataclass(frozen=True, slots=True)
 class BeamSearchConfig:
@@ -61,9 +142,12 @@ class OfficialGameBeamNode:
     sequence_history: tuple[SelectionSequence, ...]
     current_step_keys: tuple[StepKey, ...]
     step_key_history: tuple[tuple[StepKey, ...], ...]
+    state_history: tuple[tuple[float, ...], ...]
+    card_instance_history: tuple[tuple[dict[str, Any], ...], ...]
 
 
 NodeChoiceFilter = Callable[[OfficialGameBeamNode, SearchChoice, tuple[StepKey, ...]], bool]
+NodeRanker = Callable[[OfficialGameBeamNode], float]
 
 
 @dataclass(frozen=True, slots=True)
@@ -136,11 +220,15 @@ class TurnSequenceDistribution:
 class GameOutcomeLeaf:
     point: Point
     case_count: int
+    depth: int
     terminal: bool
     truncated: bool
     turns_crossed: int
     terminal_reason: int | None
     sequence_history: tuple[SelectionSequence, ...]
+    step_key_history: tuple[tuple[StepKey, ...], ...]
+    state_history: tuple[tuple[float, ...], ...]
+    card_instance_history: tuple[tuple[dict[str, Any], ...], ...]
 
 
 @dataclass(frozen=True, slots=True)
@@ -152,6 +240,10 @@ class GameOutcomeDistribution:
     leaf_count: int
     terminal_count: int
     truncated_count: int
+    terminal_case_count: int
+    truncated_case_count: int
+    terminal_depth_counts: dict[int, int]
+    truncated_depth_counts: dict[int, int]
 
     def expected_point(self) -> tuple[float, float]:
         player_expected = 0.0
@@ -240,6 +332,10 @@ def keep_all_node_choices(
     return True
 
 
+def keep_generation_order(_node: OfficialGameBeamNode) -> float:
+    return 0.0
+
+
 def final_point_from_observation(observation: Any, player_id: int, starting_prize_count: int = 6) -> Point:
     current = observation.current
     opponent_id = 1 - player_id
@@ -309,6 +405,290 @@ def selection_step_key(select: Any, choice: SearchChoice) -> StepKey:
         len(choice),
         tuple(int(select.option[index].type) for index in choice),
     )
+
+
+def encode_game_state(
+    observation: Any,
+    player_id: int | None = None,
+    *,
+    starting_prize_count: int = 6,
+) -> tuple[float, ...]:
+    """Encode an official observation into a compact numeric state vector."""
+
+    current = observation.current
+    root_player = int(current.yourIndex if player_id is None else player_id)
+    opponent_id = 1 - root_player
+    select = getattr(observation, "select", None)
+    result = int(getattr(current, "result", -1))
+    features = [
+        clamp01(number(current, "turn") / 30.0),
+        float(root_player),
+        float(result >= 0),
+        float(result == root_player),
+        float(result == opponent_id),
+        bool_float(getattr(current, "supporterPlayed", False)),
+        bool_float(getattr(current, "stadiumPlayed", False)),
+        bool_float(getattr(current, "energyAttached", False)),
+        bool_float(getattr(current, "retreated", False)),
+        clamp01(number(current, "turnActionCount") / 20.0),
+        clamp01(number(select, "type") / 50.0),
+        clamp01(number(select, "context") / 50.0),
+        clamp01(length(getattr(select, "option", ())) / 64.0),
+        clamp01(number(select, "minCount") / 8.0),
+        clamp01(number(select, "maxCount") / 8.0),
+    ]
+    features.extend(encode_player_state(current.players[root_player], starting_prize_count))
+    features.extend(encode_player_state(current.players[opponent_id], starting_prize_count))
+    return tuple(features)
+
+
+def encode_card_instances(
+    observation: Any,
+    player_id: int | None = None,
+) -> tuple[dict[str, Any], ...]:
+    """Return visible in-game card instances with dynamic state separated from card id."""
+
+    current = observation.current
+    root_player = int(current.yourIndex if player_id is None else player_id)
+    opponent_id = 1 - root_player
+    tokens: list[dict[str, Any]] = []
+    append_player_card_instances(tokens, current.players[root_player], owner=0)
+    append_player_card_instances(tokens, current.players[opponent_id], owner=1)
+    return tuple(tokens)
+
+
+def encode_visible_card_state(
+    observation: Any,
+    player_id: int | None = None,
+) -> tuple[dict[str, Any], ...]:
+    return encode_card_instances(observation, player_id)
+
+
+def append_player_card_instances(tokens: list[dict[str, Any]], player: Any, *, owner: int) -> None:
+    active = tuple(getattr(player, "active", ()) or ())
+    bench = tuple(getattr(player, "bench", ()) or ())
+    status_features = player_status_features(player)
+    if owner == 0:
+        for position, card in enumerate(tuple(getattr(player, "hand", ()) or ())):
+            append_card_instance(tokens, card, owner, "hand", "standalone", position, status_features=status_features)
+    for position, pokemon in enumerate(active):
+        append_pokemon_instance(tokens, pokemon, owner, "active", position, status_features)
+    for position, pokemon in enumerate(bench):
+        append_pokemon_instance(tokens, pokemon, owner, "bench", position, status_features)
+    for position, card in enumerate(tuple(getattr(player, "discard", ()) or ())):
+        append_card_instance(tokens, card, owner, "discard", "standalone", position, status_features=status_features)
+
+
+def append_pokemon_instance(
+    tokens: list[dict[str, Any]],
+    pokemon: Any,
+    owner: int,
+    zone: str,
+    position: int,
+    status_features: tuple[float, ...],
+) -> None:
+    if pokemon is None:
+        return
+    card_id = get_card_id(pokemon)
+    dynamic_features = pokemon_dynamic_features(pokemon, status_features)
+    append_card_instance(
+        tokens,
+        pokemon,
+        owner,
+        zone,
+        "pokemon",
+        position,
+        card_id=card_id,
+        attached_to_card_id=0,
+        dynamic_features=dynamic_features,
+    )
+    for energy_index, energy in enumerate(tuple(getattr(pokemon, "energyCards", ()) or ())):
+        append_card_instance(
+            tokens,
+            energy,
+            owner,
+            "attached_energy",
+            "attached_energy",
+            energy_index,
+            attached_to_card_id=card_id,
+        )
+    for tool_index, tool in enumerate(tuple(getattr(pokemon, "tools", ()) or ())):
+        append_card_instance(
+            tokens,
+            tool,
+            owner,
+            "tool",
+            "tool",
+            tool_index,
+            attached_to_card_id=card_id,
+        )
+    for evolution_index, pre_evolution in enumerate(tuple(getattr(pokemon, "preEvolution", ()) or ())):
+        append_card_instance(
+            tokens,
+            pre_evolution,
+            owner,
+            "pre_evolution",
+            "pre_evolution",
+            evolution_index,
+            attached_to_card_id=card_id,
+        )
+
+
+def append_card_instance(
+    tokens: list[dict[str, Any]],
+    card: Any,
+    owner: int,
+    zone: str,
+    _role: str,
+    position: int,
+    *,
+    card_id: int | None = None,
+    attached_to_card_id: int = 0,
+    status_features: tuple[float, ...] | None = None,
+    dynamic_features: tuple[float, ...] | None = None,
+) -> None:
+    resolved_card_id = get_card_id(card) if card_id is None else card_id
+    if resolved_card_id <= 0:
+        return
+    features = dynamic_features
+    if features is None:
+        features = empty_card_dynamic_features(status_features or (0.0, 0.0, 0.0, 0.0, 0.0))
+    tokens.append(
+        {
+            "card_id": resolved_card_id,
+            "owner": int(owner),
+            "zone": CARD_ZONE_NAMES.index(zone),
+            "slot": int(position),
+            "attached_to_card_id": int(attached_to_card_id),
+            "known": 1,
+            "dynamic": list(features),
+        }
+    )
+
+
+def pokemon_dynamic_features(pokemon: Any, status_features: tuple[float, ...]) -> tuple[float, ...]:
+    hp = number(pokemon, "hp")
+    max_hp = number(pokemon, "maxHp")
+    damage = max(0.0, max_hp - hp)
+    energy = energy_count(pokemon)
+    tools = length(getattr(pokemon, "tools", ()))
+    evolution_depth = length(getattr(pokemon, "preEvolution", ()))
+    return (
+        clamp01(hp / 400.0),
+        clamp01(max_hp / 400.0),
+        clamp01(damage / 400.0),
+        clamp01(energy / 10.0),
+        clamp01(tools / 4.0),
+        clamp01(evolution_depth / 3.0),
+        bool_float(getattr(pokemon, "appearThisTurn", False)),
+        *status_features,
+    )
+
+
+def empty_card_dynamic_features(status_features: tuple[float, ...]) -> tuple[float, ...]:
+    return (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, *status_features)
+
+
+def player_status_features(player: Any) -> tuple[float, ...]:
+    return (
+        bool_float(getattr(player, "asleep", False)),
+        bool_float(getattr(player, "burned", False)),
+        bool_float(getattr(player, "confused", False)),
+        bool_float(getattr(player, "paralyzed", False)),
+        bool_float(getattr(player, "poisoned", False)),
+    )
+
+
+def get_card_id(card: Any) -> int:
+    if card is None:
+        return 0
+    if isinstance(card, int):
+        return max(0, card)
+    for attr in ("id", "cardId", "card_id"):
+        value = getattr(card, attr, None)
+        if value is None:
+            continue
+        try:
+            return max(0, int(value))
+        except (TypeError, ValueError):
+            continue
+    try:
+        return max(0, int(card))
+    except (TypeError, ValueError):
+        return 0
+
+
+def encode_player_state(player: Any, starting_prize_count: int) -> list[float]:
+    active = tuple(getattr(player, "active", ()) or ())
+    bench = tuple(getattr(player, "bench", ()) or ())
+    active_pokemon = tuple(pokemon for pokemon in active if pokemon is not None)
+    bench_pokemon = tuple(pokemon for pokemon in bench if pokemon is not None)
+    all_pokemon = active_pokemon + bench_pokemon
+    active_card = active_pokemon[0] if active_pokemon else None
+    prize_remaining = length(getattr(player, "prize", ()))
+    active_hp = number(active_card, "hp")
+    active_max_hp = number(active_card, "maxHp")
+    bench_hp_sum = sum(number(pokemon, "hp") for pokemon in bench_pokemon)
+    bench_max_hp_sum = sum(number(pokemon, "maxHp") for pokemon in bench_pokemon)
+    active_energy = energy_count(active_card)
+    bench_energy = sum(energy_count(pokemon) for pokemon in bench_pokemon)
+    return [
+        clamp01(prize_remaining / starting_prize_count),
+        clamp01((starting_prize_count - prize_remaining) / starting_prize_count),
+        clamp01(number(player, "deckCount") / 60.0),
+        clamp01(number(player, "handCount") / 20.0),
+        clamp01(length(getattr(player, "discard", ())) / 60.0),
+        clamp01(len(active_pokemon)),
+        clamp01(len(bench_pokemon) / max(1.0, number(player, "benchMax", fallback=5.0))),
+        clamp01(len(all_pokemon) / 6.0),
+        clamp01(active_hp / 400.0),
+        clamp01(active_max_hp / 400.0),
+        clamp01(max(0.0, active_max_hp - active_hp) / 400.0),
+        clamp01(active_energy / 10.0),
+        clamp01(length(getattr(active_card, "tools", ())) / 4.0),
+        clamp01(bench_hp_sum / 1000.0),
+        clamp01(max(0.0, bench_max_hp_sum - bench_hp_sum) / 1000.0),
+        clamp01(bench_energy / 20.0),
+        clamp01((active_energy + bench_energy) / 30.0),
+        clamp01(sum(bool(getattr(pokemon, "appearThisTurn", False)) for pokemon in all_pokemon) / 6.0),
+        bool_float(getattr(player, "asleep", False)),
+        bool_float(getattr(player, "burned", False)),
+        bool_float(getattr(player, "confused", False)),
+        bool_float(getattr(player, "paralyzed", False)),
+        bool_float(getattr(player, "poisoned", False)),
+    ]
+
+
+def number(value: Any, attr: str, *, fallback: float = 0.0) -> float:
+    if value is None:
+        return fallback
+    try:
+        return float(getattr(value, attr))
+    except (TypeError, ValueError, AttributeError):
+        return fallback
+
+
+def length(value: Any) -> int:
+    if value is None:
+        return 0
+    try:
+        return len(value)
+    except TypeError:
+        return 0
+
+
+def energy_count(pokemon: Any) -> int:
+    if pokemon is None:
+        return 0
+    return length(getattr(pokemon, "energies", ())) + length(getattr(pokemon, "energyCards", ()))
+
+
+def bool_float(value: Any) -> float:
+    return float(bool(value))
+
+
+def clamp01(value: float) -> float:
+    return min(1.0, max(0.0, float(value)))
 
 
 def beam_search_point_distribution(
@@ -534,6 +914,7 @@ def beam_search_game_outcome_distribution(
     choice_filter: ChoiceFilter = keep_all_choices,
     sequence_choice_filter: SequenceChoiceFilter = keep_all_sequence_choices,
     node_choice_filter: NodeChoiceFilter = keep_all_node_choices,
+    node_ranker: NodeRanker = keep_generation_order,
     point_fn: PointFn = default_outcome_point_fn,
     cg_root: str | Path | None = None,
 ) -> GameOutcomeDistribution:
@@ -552,6 +933,8 @@ def beam_search_game_outcome_distribution(
             sequence_history=(),
             current_step_keys=(),
             step_key_history=(),
+            state_history=(encode_game_state(root.observation, player_id=root_player),),
+            card_instance_history=(encode_card_instances(root.observation, player_id=root_player),),
         )
     ]
     leaves: list[GameOutcomeLeaf] = []
@@ -621,6 +1004,10 @@ def beam_search_game_outcome_distribution(
                         sequence_history=sequence_history,
                         current_step_keys=current_step_keys,
                         step_key_history=step_key_history,
+                        state_history=node.state_history
+                        + (encode_game_state(next_state.observation, player_id=root_player),),
+                        card_instance_history=node.card_instance_history
+                        + (encode_card_instances(next_state.observation, player_id=root_player),),
                     )
                 )
                 added_candidate = True
@@ -631,6 +1018,8 @@ def beam_search_game_outcome_distribution(
             frontier = []
             break
 
+        if len(candidates) > search_config.beam_width:
+            candidates.sort(key=node_ranker, reverse=True)
         kept = candidates[: search_config.beam_width]
         if search_config.release_pruned_states:
             kept_ids = {node.search_state.searchId for node in kept}
@@ -649,11 +1038,21 @@ def beam_search_game_outcome_distribution(
     total_case_count = 0
     terminal_count = 0
     truncated_count = 0
+    terminal_case_count = 0
+    truncated_case_count = 0
+    terminal_depth_counts: Counter[int] = Counter()
+    truncated_depth_counts: Counter[int] = Counter()
     for leaf in leaves:
         point_case_counts[leaf.point] += leaf.case_count
         total_case_count += leaf.case_count
         terminal_count += int(leaf.terminal)
         truncated_count += int(leaf.truncated)
+        if leaf.terminal:
+            terminal_case_count += leaf.case_count
+            terminal_depth_counts[leaf.depth] += leaf.case_count
+        if leaf.truncated:
+            truncated_case_count += leaf.case_count
+            truncated_depth_counts[leaf.depth] += leaf.case_count
 
     case_counts = dict(sorted(point_case_counts.items()))
     probabilities: dict[Point, float] = {point: float(count) for point, count in case_counts.items()}
@@ -671,6 +1070,10 @@ def beam_search_game_outcome_distribution(
         leaf_count=len(leaves),
         terminal_count=terminal_count,
         truncated_count=truncated_count,
+        terminal_case_count=terminal_case_count,
+        truncated_case_count=truncated_case_count,
+        terminal_depth_counts=dict(sorted(terminal_depth_counts.items())),
+        truncated_depth_counts=dict(sorted(truncated_depth_counts.items())),
     )
 
 
@@ -685,16 +1088,23 @@ def make_game_outcome_leaf(
     observation = node.search_state.observation
     current = observation.current
     sequence_history = node.sequence_history
+    step_key_history = node.step_key_history
     if node.current_sequence:
         sequence_history = sequence_history + (node.current_sequence,)
+    if node.current_step_keys:
+        step_key_history = step_key_history + (node.current_step_keys,)
     return GameOutcomeLeaf(
         point=point_fn(node.search_state, player_id, config.starting_prize_count),
         case_count=node.case_count,
+        depth=node.depth,
         terminal=current.result >= 0,
         truncated=truncated,
         turns_crossed=node.turns_crossed,
         terminal_reason=terminal_result_reason(observation),
         sequence_history=sequence_history,
+        step_key_history=step_key_history,
+        state_history=node.state_history,
+        card_instance_history=node.card_instance_history,
     )
 
 

@@ -1,0 +1,378 @@
+[
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 0,
+      "game_index": 0,
+      "step": 3,
+      "turn": 1,
+      "your_index": 1,
+      "option_count": 8,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 8,
+      "deck_counts": [
+        47,
+        46
+      ],
+      "hand_counts": [
+        6,
+        7
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 8724.49549997691,
+    "total_case_count": 80,
+    "leaf_count": 80,
+    "terminal_count": 16,
+    "truncated_count": 64,
+    "terminal_case_count": 16,
+    "truncated_case_count": 64,
+    "terminal_leaf_rate": 0.2,
+    "terminal_case_rate": 0.2,
+    "terminal_depth_mean": 44.0,
+    "truncated_depth_mean": 62.0,
+    "distribution_size": 2,
+    "expected_point": [
+      5.2,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 1,
+      "game_index": 0,
+      "step": 7,
+      "turn": 3,
+      "your_index": 1,
+      "option_count": 9,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 9,
+      "deck_counts": [
+        46,
+        45
+      ],
+      "hand_counts": [
+        6,
+        7
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 1312.9105999832973,
+    "total_case_count": 136,
+    "leaf_count": 136,
+    "terminal_count": 136,
+    "truncated_count": 0,
+    "terminal_case_count": 136,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 9.411764705882353,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 2,
+      "game_index": 0,
+      "step": 10,
+      "turn": 3,
+      "your_index": 1,
+      "option_count": 3,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 3,
+      "deck_counts": [
+        46,
+        45
+      ],
+      "hand_counts": [
+        6,
+        5
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 1034.6332000335678,
+    "total_case_count": 88,
+    "leaf_count": 88,
+    "terminal_count": 88,
+    "truncated_count": 0,
+    "terminal_case_count": 88,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 9.318181818181818,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 3,
+      "game_index": 0,
+      "step": 14,
+      "turn": 4,
+      "your_index": 0,
+      "option_count": 6,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 6,
+      "deck_counts": [
+        39,
+        45
+      ],
+      "hand_counts": [
+        5,
+        5
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 1.9492999417707324,
+    "total_case_count": 6,
+    "leaf_count": 6,
+    "terminal_count": 6,
+    "truncated_count": 0,
+    "terminal_case_count": 6,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 1.0,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 4,
+      "game_index": 1,
+      "step": 4,
+      "turn": 1,
+      "your_index": 1,
+      "option_count": 7,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 7,
+      "deck_counts": [
+        47,
+        44
+      ],
+      "hand_counts": [
+        6,
+        9
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 8654.665300040506,
+    "total_case_count": 64,
+    "leaf_count": 64,
+    "terminal_count": 0,
+    "truncated_count": 64,
+    "terminal_case_count": 0,
+    "truncated_case_count": 64,
+    "terminal_leaf_rate": 0.0,
+    "terminal_case_rate": 0.0,
+    "terminal_depth_mean": 0.0,
+    "truncated_depth_mean": 59.0,
+    "distribution_size": 1,
+    "expected_point": [
+      4.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 5,
+      "game_index": 1,
+      "step": 10,
+      "turn": 3,
+      "your_index": 1,
+      "option_count": 8,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 8,
+      "deck_counts": [
+        46,
+        43
+      ],
+      "hand_counts": [
+        6,
+        7
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 736.7933000205085,
+    "total_case_count": 130,
+    "leaf_count": 130,
+    "terminal_count": 130,
+    "truncated_count": 0,
+    "terminal_case_count": 130,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 7.123076923076923,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 6,
+      "game_index": 1,
+      "step": 16,
+      "turn": 5,
+      "your_index": 1,
+      "option_count": 7,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 7,
+      "deck_counts": [
+        43,
+        42
+      ],
+      "hand_counts": [
+        7,
+        6
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 634.7880999092013,
+    "total_case_count": 88,
+    "leaf_count": 88,
+    "terminal_count": 88,
+    "truncated_count": 0,
+    "terminal_case_count": 88,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 6.181818181818182,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  },
+  {
+    "mode": "game",
+    "filter_profile": "agent-v1",
+    "ranking_profile": "terminal-stats",
+    "snapshot": {
+      "index": 7,
+      "game_index": 1,
+      "step": 22,
+      "turn": 6,
+      "your_index": 0,
+      "option_count": 6,
+      "min_count": 1,
+      "max_count": 1,
+      "choice_count_capped": 6,
+      "deck_counts": [
+        42,
+        42
+      ],
+      "hand_counts": [
+        6,
+        6
+      ],
+      "prize_counts": [
+        6,
+        6
+      ]
+    },
+    "beam_width": 64,
+    "max_steps": 256,
+    "max_choices_per_state": 16,
+    "elapsed_ms": 0.8409000001847744,
+    "total_case_count": 6,
+    "leaf_count": 6,
+    "terminal_count": 6,
+    "truncated_count": 0,
+    "terminal_case_count": 6,
+    "truncated_case_count": 0,
+    "terminal_leaf_rate": 1.0,
+    "terminal_case_rate": 1.0,
+    "terminal_depth_mean": 1.0,
+    "truncated_depth_mean": 0.0,
+    "distribution_size": 1,
+    "expected_point": [
+      6.0,
+      0.0
+    ]
+  }
+]

@@ -5,10 +5,12 @@ from pokemon_card_simulator import (
     BeamSearchConfig,
     GameOutcomeSearchConfig,
     PointDistribution,
+    STATE_FEATURE_NAMES,
     TurnSequenceSearchConfig,
     beam_search_game_outcome_distribution,
     beam_search_point_distribution,
     beam_search_turn_sequence_distribution,
+    encode_game_state,
     ensure_cg_api,
     final_point_from_observation,
     is_turn_boundary,
@@ -65,6 +67,64 @@ class OfficialApiTests(unittest.TestCase):
 
         self.assertEqual(final_point_from_observation(observation, player_id=0, starting_prize_count=6), (2, 4))
         self.assertEqual(final_point_from_observation(observation, player_id=1, starting_prize_count=6), (4, 2))
+
+    def test_encode_game_state_returns_bounded_numeric_vector(self) -> None:
+        pokemon = SimpleNamespace(
+            hp=40,
+            maxHp=70,
+            energies=[1, 2],
+            energyCards=[],
+            tools=[object()],
+            appearThisTurn=True,
+        )
+        player = SimpleNamespace(
+            active=[pokemon],
+            bench=[],
+            benchMax=5,
+            prize=[object()] * 5,
+            deckCount=40,
+            handCount=7,
+            discard=[object()] * 3,
+            asleep=False,
+            burned=False,
+            confused=False,
+            paralyzed=False,
+            poisoned=False,
+        )
+        opponent = SimpleNamespace(
+            active=[],
+            bench=[],
+            benchMax=5,
+            prize=[object()] * 6,
+            deckCount=42,
+            handCount=5,
+            discard=[],
+            asleep=False,
+            burned=False,
+            confused=False,
+            paralyzed=False,
+            poisoned=False,
+        )
+        observation = SimpleNamespace(
+            select=SimpleNamespace(type=0, context=0, minCount=1, maxCount=1, option=[object(), object()]),
+            current=SimpleNamespace(
+                turn=3,
+                yourIndex=0,
+                result=-1,
+                supporterPlayed=True,
+                stadiumPlayed=False,
+                energyAttached=True,
+                retreated=False,
+                turnActionCount=2,
+                players=[player, opponent],
+            ),
+        )
+
+        vector = encode_game_state(observation, player_id=0)
+
+        self.assertEqual(len(vector), len(STATE_FEATURE_NAMES))
+        self.assertTrue(all(0.0 <= value <= 1.0 for value in vector))
+        self.assertGreater(vector[STATE_FEATURE_NAMES.index("self_active_damage_norm")], 0.0)
 
     def test_outcome_point_maps_non_prize_wins_to_max_score(self) -> None:
         observation = SimpleNamespace(
@@ -424,6 +484,90 @@ class OfficialApiTests(unittest.TestCase):
 
         self.assertEqual(distribution.total_case_count, 1)
         self.assertEqual(distribution.point_case_counts, {(6, 0): 1})
+
+    def test_game_outcome_node_ranker_controls_beam_pruning(self) -> None:
+        root_state = SimpleNamespace(
+            turn=1,
+            yourIndex=0,
+            result=-1,
+            players=[
+                SimpleNamespace(prize=[object()] * 6),
+                SimpleNamespace(prize=[object()] * 6),
+            ],
+        )
+        root = SimpleNamespace(
+            observation=SimpleNamespace(
+                logs=[],
+                select=SimpleNamespace(
+                    type=0,
+                    context=0,
+                    minCount=1,
+                    maxCount=1,
+                    option=[SimpleNamespace(type=7), SimpleNamespace(type=14)],
+                ),
+                current=root_state,
+            ),
+            searchId=10,
+        )
+
+        class FakeApi:
+            @staticmethod
+            def search_step(_search_id, select):
+                if select == [1]:
+                    return SimpleNamespace(
+                        observation=SimpleNamespace(
+                            logs=[SimpleNamespace(result=0, reason=4)],
+                            select=None,
+                            current=SimpleNamespace(
+                                turn=1,
+                                yourIndex=0,
+                                result=0,
+                                players=[
+                                    SimpleNamespace(prize=[object()] * 6),
+                                    SimpleNamespace(prize=[object()] * 6),
+                                ],
+                            ),
+                        ),
+                        searchId=21,
+                    )
+                return SimpleNamespace(
+                    observation=SimpleNamespace(
+                        logs=[],
+                        select=None,
+                        current=SimpleNamespace(
+                            turn=1,
+                            yourIndex=0,
+                            result=-1,
+                            players=[
+                                SimpleNamespace(prize=[object()] * 6),
+                                SimpleNamespace(prize=[object()] * 6),
+                            ],
+                        ),
+                    ),
+                    searchId=20,
+                )
+
+        original_ensure_cg_api = official.ensure_cg_api
+        official.ensure_cg_api = lambda _cg_root=None: FakeApi
+        try:
+            distribution = beam_search_game_outcome_distribution(
+                root,
+                config=GameOutcomeSearchConfig(
+                    beam_width=1,
+                    max_turns=4,
+                    max_total_steps=4,
+                    release_pruned_states=False,
+                ),
+                player_id=0,
+                node_ranker=lambda node: 1.0 if node.search_state.observation.current.result >= 0 else 0.0,
+            )
+        finally:
+            official.ensure_cg_api = original_ensure_cg_api
+
+        self.assertEqual(distribution.terminal_count, 1)
+        self.assertEqual(distribution.truncated_count, 0)
+        self.assertEqual(distribution.terminal_case_count, 1)
+        self.assertEqual(distribution.terminal_depth_counts, {1: 1})
 
     def test_game_outcome_absolute_turn_cap_truncates_long_games(self) -> None:
         root = SimpleNamespace(
