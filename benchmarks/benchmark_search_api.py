@@ -10,6 +10,7 @@ import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 SRC = ROOT / "src"
@@ -17,8 +18,13 @@ if str(SRC) not in sys.path:
     sys.path.insert(0, str(SRC))
 
 from pokemon_card_simulator import (  # noqa: E402
-    BeamSearchConfig,
-    beam_search_point_distribution,
+    GameOutcomeSearchConfig,
+    NodeChoiceFilter,
+    OfficialGameBeamNode,
+    StepKey,
+    TurnSequenceSearchConfig,
+    beam_search_game_outcome_distribution,
+    beam_search_turn_sequence_distribution,
     ensure_cg_api,
     iter_selection_choices,
 )
@@ -112,13 +118,17 @@ class ObservationSnapshot:
 
 @dataclass(frozen=True, slots=True)
 class BenchmarkRow:
+    mode: str
+    filter_profile: str
     snapshot: ObservationSnapshot
     beam_width: int
-    max_depth: int
+    max_steps: int
     max_choices_per_state: int
     elapsed_ms: float
-    retained_probability: float
+    total_case_count: int
     leaf_count: int
+    terminal_count: int
+    truncated_count: int
     distribution_size: int
     expected_point: tuple[float, float]
 
@@ -130,10 +140,17 @@ def main() -> None:
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--max-steps", type=int, default=160)
     parser.add_argument("--max-choices", type=int, default=64)
-    parser.add_argument("--configs", default="16x3,32x3,32x5,64x5")
-    parser.add_argument("--out", default="benchmarks/search_api_benchmark.json")
+    parser.add_argument("--configs")
+    parser.add_argument("--mode", choices=("sequence", "game"), default="game")
+    parser.add_argument("--max-turns", type=int, default=32)
+    parser.add_argument("--max-absolute-turn", type=int, default=16)
+    parser.add_argument("--max-sequence-steps-per-turn", type=int, default=64)
+    parser.add_argument("--max-leaf-count", type=int, default=100_000)
+    parser.add_argument("--filter-profile", choices=("none", "agent-v1"), default="agent-v1")
+    parser.add_argument("--out", default="benchmarks/search_api_game_benchmark.json")
     parser.add_argument("--include-setup", action="store_true")
     args = parser.parse_args()
+    raw_configs = args.configs or default_configs(args.mode)
 
     random.seed(args.seed)
     api = ensure_cg_api()
@@ -156,7 +173,18 @@ def main() -> None:
 
     if not snapshots:
         raise RuntimeError("no benchmarkable Search API observations were collected")
-    rows = run_benchmark(api, snapshots, parse_configs(args.configs), args.max_choices)
+    rows = run_benchmark(
+        api,
+        snapshots,
+        parse_configs(raw_configs),
+        args.max_choices,
+        mode=args.mode,
+        max_turns=args.max_turns,
+        max_absolute_turn=args.max_absolute_turn,
+        max_sequence_steps_per_turn=args.max_sequence_steps_per_turn,
+        max_leaf_count=args.max_leaf_count,
+        filter_profile=args.filter_profile,
+    )
 
     out_path = ROOT / args.out
     out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -220,36 +248,74 @@ def evenly_spaced(values: list[ObservationRecord], limit: int) -> list[Observati
     return [values[round(index * last / (limit - 1))] for index in range(limit)]
 
 
-def run_benchmark(api, snapshots: list, configs: list[tuple[int, int]], max_choices: int) -> list[BenchmarkRow]:
+def run_benchmark(
+    api,
+    snapshots: list,
+    configs: list[tuple[int, int]],
+    max_choices: int,
+    *,
+    mode: str,
+    max_turns: int,
+    max_absolute_turn: int,
+    max_sequence_steps_per_turn: int,
+    max_leaf_count: int,
+    filter_profile: str,
+) -> list[BenchmarkRow]:
     rows: list[BenchmarkRow] = []
+    node_choice_filter = make_node_choice_filter(api, filter_profile)
     for index, record in enumerate(snapshots):
         obs = record.observation
         snapshot = make_snapshot(index, record, max_choices)
-        for beam_width, max_depth in configs:
+        for beam_width, max_steps in configs:
             root = begin_search_with_sample_hidden_zones(api, obs)
             try:
-                config = BeamSearchConfig(
-                    beam_width=beam_width,
-                    max_depth=max_depth,
-                    max_choices_per_state=max_choices,
-                )
+                if mode == "sequence":
+                    config = TurnSequenceSearchConfig(
+                        beam_width=beam_width,
+                        max_sequence_steps=max_steps,
+                        max_choices_per_state=max_choices,
+                    )
+                    search = beam_search_turn_sequence_distribution
+                else:
+                    config = GameOutcomeSearchConfig(
+                        beam_width=beam_width,
+                        max_total_steps=max_steps,
+                        max_turns=max_turns,
+                        max_choices_per_state=max_choices,
+                        max_leaf_count=max_leaf_count,
+                        max_absolute_turn=max_absolute_turn,
+                        max_sequence_steps_per_turn=max_sequence_steps_per_turn,
+                    )
+                    search = beam_search_game_outcome_distribution
                 started = time.perf_counter()
-                distribution = beam_search_point_distribution(
-                    root,
-                    config=config,
-                    player_id=obs.current.yourIndex,
-                )
+                if mode == "sequence":
+                    distribution = search(
+                        root,
+                        config=config,
+                        player_id=obs.current.yourIndex,
+                    )
+                else:
+                    distribution = search(
+                        root,
+                        config=config,
+                        player_id=obs.current.yourIndex,
+                        node_choice_filter=node_choice_filter,
+                    )
                 elapsed_ms = (time.perf_counter() - started) * 1000
                 rows.append(
                     BenchmarkRow(
+                        mode=mode,
+                        filter_profile=filter_profile if mode == "game" else "none",
                         snapshot=snapshot,
                         beam_width=beam_width,
-                        max_depth=max_depth,
+                        max_steps=max_steps,
                         max_choices_per_state=max_choices,
                         elapsed_ms=elapsed_ms,
-                        retained_probability=distribution.retained_probability,
+                        total_case_count=get_total_case_count(distribution),
                         leaf_count=distribution.leaf_count,
-                        distribution_size=len(distribution.probabilities),
+                        terminal_count=get_terminal_count(distribution),
+                        truncated_count=distribution.truncated_count,
+                        distribution_size=len(distribution.point_probabilities),
                         expected_point=distribution.expected_point(),
                     )
                 )
@@ -296,12 +362,64 @@ def make_snapshot(index: int, record: ObservationRecord, max_choices: int) -> Ob
     )
 
 
+def make_node_choice_filter(api: Any, filter_profile: str) -> NodeChoiceFilter:
+    if filter_profile == "none":
+        return lambda _node, _choice, _proposed_step_keys: True
+    if filter_profile != "agent-v1":
+        raise ValueError(f"unsupported filter profile: {filter_profile}")
+
+    main_select = int(api.SelectType.MAIN)
+    main_context = int(api.SelectContext.MAIN)
+    to_hand_context = int(api.SelectContext.TO_HAND)
+    play_option = int(api.OptionType.PLAY)
+    attach_option = int(api.OptionType.ATTACH)
+
+    def is_main_option(step: StepKey, option_type: int) -> bool:
+        select_type, context, _count, option_types = step
+        return select_type == main_select and context == main_context and option_type in option_types
+
+    def node_choice_filter(
+        _node: OfficialGameBeamNode,
+        _choice: tuple[int, ...],
+        proposed_step_keys: tuple[StepKey, ...],
+    ) -> bool:
+        latest = proposed_step_keys[-1]
+        if latest[1] == to_hand_context and latest[2] == 0:
+            return False
+        if len(proposed_step_keys) >= 10:
+            return False
+        if sum(is_main_option(step, play_option) for step in proposed_step_keys) >= 4:
+            return False
+        if sum(is_main_option(step, attach_option) for step in proposed_step_keys) >= 2:
+            return False
+        return True
+
+    return node_choice_filter
+
+
 def parse_configs(raw: str) -> list[tuple[int, int]]:
     configs: list[tuple[int, int]] = []
     for part in raw.split(","):
         width, depth = part.lower().split("x", maxsplit=1)
         configs.append((int(width), int(depth)))
     return configs
+
+
+def default_configs(mode: str) -> str:
+    if mode == "sequence":
+        return "16x6,32x6,32x10,64x10"
+    return "32x64,64x128"
+
+
+def get_total_case_count(distribution) -> int:
+    total_case_count = getattr(distribution, "total_case_count", None)
+    if total_case_count is not None:
+        return int(total_case_count)
+    return int(getattr(distribution, "leaf_count", 0))
+
+
+def get_terminal_count(distribution) -> int:
+    return int(getattr(distribution, "terminal_count", 0))
 
 
 def row_to_json(row: BenchmarkRow) -> dict:
@@ -312,20 +430,28 @@ def row_to_json(row: BenchmarkRow) -> dict:
 
 def print_summary(rows: list[BenchmarkRow]) -> None:
     print("rows", len(rows))
-    grouped: dict[tuple[int, int], list[float]] = {}
-    retained: dict[tuple[int, int], list[float]] = {}
+    grouped: dict[tuple[str, str, int, int], list[float]] = {}
+    case_counts: dict[tuple[str, str, int, int], list[int]] = {}
+    terminals: dict[tuple[str, str, int, int], list[int]] = {}
+    truncations: dict[tuple[str, str, int, int], list[int]] = {}
     for row in rows:
-        key = (row.beam_width, row.max_depth)
+        key = (row.mode, row.filter_profile, row.beam_width, row.max_steps)
         grouped.setdefault(key, []).append(row.elapsed_ms)
-        retained.setdefault(key, []).append(row.retained_probability)
-    for (width, depth), values in sorted(grouped.items()):
-        mass = retained[(width, depth)]
+        case_counts.setdefault(key, []).append(row.total_case_count)
+        terminals.setdefault(key, []).append(row.terminal_count)
+        truncations.setdefault(key, []).append(row.truncated_count)
+    for (mode, filter_profile, width, steps), values in sorted(grouped.items()):
+        cases = case_counts[(mode, filter_profile, width, steps)]
+        terminal_values = terminals[(mode, filter_profile, width, steps)]
+        truncated_values = truncations[(mode, filter_profile, width, steps)]
         print(
-            f"beam={width:>3} depth={depth:<2} "
+            f"mode={mode:<8} filter={filter_profile:<8} beam={width:>3} steps={steps:<3} "
             f"mean={statistics.mean(values):7.2f}ms "
             f"p50={statistics.median(values):7.2f}ms "
             f"max={max(values):7.2f}ms "
-            f"mass_mean={statistics.mean(mass):.4f}"
+            f"cases_mean={statistics.mean(cases):.1f} "
+            f"terminal_mean={statistics.mean(terminal_values):.1f} "
+            f"truncated_mean={statistics.mean(truncated_values):.1f}"
         )
 
 

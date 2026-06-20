@@ -3,15 +3,23 @@ import unittest
 
 from pokemon_card_simulator import (
     BeamSearchConfig,
+    GameOutcomeSearchConfig,
     PointDistribution,
+    TurnSequenceSearchConfig,
+    beam_search_game_outcome_distribution,
     beam_search_point_distribution,
+    beam_search_turn_sequence_distribution,
     ensure_cg_api,
     final_point_from_observation,
+    is_turn_boundary,
     iter_selection_choices,
     load_official_attacks,
     load_official_cards,
     normalize_prior,
+    outcome_point_from_observation,
+    terminal_result_reason,
 )
+import pokemon_card_simulator.official as official
 
 
 class OfficialApiTests(unittest.TestCase):
@@ -58,6 +66,36 @@ class OfficialApiTests(unittest.TestCase):
         self.assertEqual(final_point_from_observation(observation, player_id=0, starting_prize_count=6), (2, 4))
         self.assertEqual(final_point_from_observation(observation, player_id=1, starting_prize_count=6), (4, 2))
 
+    def test_outcome_point_maps_non_prize_wins_to_max_score(self) -> None:
+        observation = SimpleNamespace(
+            logs=[SimpleNamespace(result=0, reason=2)],
+            current=SimpleNamespace(
+                result=0,
+                players=[
+                    SimpleNamespace(prize=[object()] * 4),
+                    SimpleNamespace(prize=[object()] * 6),
+                ],
+            ),
+        )
+
+        self.assertEqual(terminal_result_reason(observation), 2)
+        self.assertEqual(outcome_point_from_observation(observation, player_id=0), (6, 0))
+        self.assertEqual(outcome_point_from_observation(observation, player_id=1), (0, 6))
+
+    def test_outcome_point_keeps_prize_win_score(self) -> None:
+        observation = SimpleNamespace(
+            logs=[SimpleNamespace(result=0, reason=1)],
+            current=SimpleNamespace(
+                result=0,
+                players=[
+                    SimpleNamespace(prize=[]),
+                    SimpleNamespace(prize=[object()] * 2),
+                ],
+            ),
+        )
+
+        self.assertEqual(outcome_point_from_observation(observation, player_id=0), (6, 4))
+
     def test_point_distribution_expected_point(self) -> None:
         distribution = PointDistribution({(1, 0): 0.25, (2, 1): 0.75}, 1.0, 2)
 
@@ -93,6 +131,333 @@ class OfficialApiTests(unittest.TestCase):
         self.assertEqual(distribution.retained_probability, 1.0)
         self.assertEqual(distribution.leaf_count, 1)
         self.assertEqual(distribution.probabilities, {(0, 0): 1.0})
+
+    def test_turn_boundary_detects_next_player_or_turn(self) -> None:
+        root = SimpleNamespace(turn=3, yourIndex=0, result=-1)
+
+        self.assertFalse(is_turn_boundary(root, SimpleNamespace(turn=3, yourIndex=0, result=-1)))
+        self.assertTrue(is_turn_boundary(root, SimpleNamespace(turn=4, yourIndex=1, result=-1)))
+        self.assertTrue(is_turn_boundary(root, SimpleNamespace(turn=3, yourIndex=1, result=-1)))
+        self.assertTrue(is_turn_boundary(root, SimpleNamespace(turn=3, yourIndex=0, result=0)))
+
+    def test_turn_sequence_distribution_keeps_selection_sequences(self) -> None:
+        root_state = SimpleNamespace(
+            turn=1,
+            yourIndex=0,
+            result=-1,
+            players=[
+                SimpleNamespace(prize=[object()] * 6),
+                SimpleNamespace(prize=[object()] * 6),
+            ],
+        )
+        root_observation = SimpleNamespace(
+            select=SimpleNamespace(minCount=1, maxCount=1, option=[object(), object()]),
+            current=root_state,
+        )
+        root = SimpleNamespace(observation=root_observation, searchId=10)
+
+        class FakeApi:
+            @staticmethod
+            def search_step(_search_id, select):
+                if select == [0]:
+                    prizes = ([object()] * 5, [object()] * 6)
+                else:
+                    prizes = ([object()] * 6, [object()] * 5)
+                current = SimpleNamespace(
+                    turn=2,
+                    yourIndex=1,
+                    result=-1,
+                    players=[
+                        SimpleNamespace(prize=prizes[0]),
+                        SimpleNamespace(prize=prizes[1]),
+                    ],
+                )
+                return SimpleNamespace(
+                    observation=SimpleNamespace(select=None, current=current),
+                    searchId=20 + select[0],
+                )
+
+        original_ensure_cg_api = official.ensure_cg_api
+        official.ensure_cg_api = lambda _cg_root=None: FakeApi
+        try:
+            distribution = beam_search_turn_sequence_distribution(
+                root,
+                config=TurnSequenceSearchConfig(max_sequence_steps=3, beam_width=4),
+            )
+        finally:
+            official.ensure_cg_api = original_ensure_cg_api
+
+        self.assertEqual(distribution.retained_probability, 1.0)
+        self.assertEqual(distribution.truncated_count, 0)
+        self.assertEqual(distribution.point_probabilities, {(0, 1): 0.5, (1, 0): 0.5})
+        self.assertEqual(
+            {leaf.sequence for leaf in distribution.sequence_leaves},
+            {((0,),), ((1,),)},
+        )
+
+    def test_game_outcome_distribution_rolls_across_turns_to_terminal(self) -> None:
+        root_state = SimpleNamespace(
+            turn=1,
+            yourIndex=0,
+            result=-1,
+            players=[
+                SimpleNamespace(prize=[object()] * 6),
+                SimpleNamespace(prize=[object()] * 6),
+            ],
+        )
+        root_observation = SimpleNamespace(
+            logs=[],
+            select=SimpleNamespace(
+                type=0,
+                context=0,
+                minCount=1,
+                maxCount=1,
+                option=[SimpleNamespace(type=7), SimpleNamespace(type=14)],
+            ),
+            current=root_state,
+        )
+        root = SimpleNamespace(observation=root_observation, searchId=10)
+
+        class FakeApi:
+            @staticmethod
+            def search_step(search_id, select):
+                if search_id == 10 and select == [0]:
+                    current = SimpleNamespace(
+                        turn=2,
+                        yourIndex=1,
+                        result=-1,
+                        players=[
+                            SimpleNamespace(prize=[object()] * 6),
+                            SimpleNamespace(prize=[object()] * 6),
+                        ],
+                    )
+                    return SimpleNamespace(
+                        observation=SimpleNamespace(
+                            logs=[],
+                            select=SimpleNamespace(
+                                type=0,
+                                context=0,
+                                minCount=1,
+                                maxCount=1,
+                                option=[SimpleNamespace(type=14)],
+                            ),
+                            current=current,
+                        ),
+                        searchId=20,
+                    )
+                if search_id == 10 and select == [1]:
+                    current = SimpleNamespace(
+                        turn=1,
+                        yourIndex=0,
+                        result=1,
+                        players=[
+                            SimpleNamespace(prize=[object()] * 6),
+                            SimpleNamespace(prize=[object()] * 6),
+                        ],
+                    )
+                    return SimpleNamespace(
+                        observation=SimpleNamespace(
+                            logs=[SimpleNamespace(result=1, reason=4)],
+                            select=None,
+                            current=current,
+                        ),
+                        searchId=21,
+                    )
+                current = SimpleNamespace(
+                    turn=2,
+                    yourIndex=1,
+                    result=0,
+                    players=[
+                        SimpleNamespace(prize=[object()] * 6),
+                        SimpleNamespace(prize=[object()] * 6),
+                    ],
+                )
+                return SimpleNamespace(
+                    observation=SimpleNamespace(
+                        logs=[SimpleNamespace(result=0, reason=2)],
+                        select=None,
+                        current=current,
+                    ),
+                    searchId=30,
+                )
+
+        original_ensure_cg_api = official.ensure_cg_api
+        official.ensure_cg_api = lambda _cg_root=None: FakeApi
+        try:
+            distribution = beam_search_game_outcome_distribution(
+                root,
+                config=GameOutcomeSearchConfig(
+                    beam_width=8,
+                    max_turns=4,
+                    max_total_steps=8,
+                ),
+                player_id=0,
+            )
+        finally:
+            official.ensure_cg_api = original_ensure_cg_api
+
+        self.assertEqual(distribution.total_case_count, 2)
+        self.assertEqual(distribution.terminal_count, 2)
+        self.assertEqual(distribution.truncated_count, 0)
+        self.assertEqual(distribution.point_case_counts, {(0, 6): 1, (6, 0): 1})
+        self.assertEqual(distribution.point_probabilities, {(0, 6): 0.5, (6, 0): 0.5})
+
+    def test_game_outcome_choice_filter_excludes_cases_before_counting(self) -> None:
+        root_state = SimpleNamespace(
+            turn=1,
+            yourIndex=0,
+            result=-1,
+            players=[
+                SimpleNamespace(prize=[object()] * 6),
+                SimpleNamespace(prize=[object()] * 6),
+            ],
+        )
+        root = SimpleNamespace(
+            observation=SimpleNamespace(
+                logs=[],
+                select=SimpleNamespace(
+                    type=0,
+                    context=0,
+                    minCount=1,
+                    maxCount=1,
+                    option=[SimpleNamespace(type=7), SimpleNamespace(type=14)],
+                ),
+                current=root_state,
+            ),
+            searchId=10,
+        )
+
+        class FakeApi:
+            @staticmethod
+            def search_step(_search_id, select):
+                current = SimpleNamespace(
+                    turn=1,
+                    yourIndex=0,
+                    result=select[0],
+                    players=[
+                        SimpleNamespace(prize=[object()] * 6),
+                        SimpleNamespace(prize=[object()] * 6),
+                    ],
+                )
+                return SimpleNamespace(
+                    observation=SimpleNamespace(
+                        logs=[SimpleNamespace(result=select[0], reason=4)],
+                        select=None,
+                        current=current,
+                    ),
+                    searchId=20 + select[0],
+                )
+
+        original_ensure_cg_api = official.ensure_cg_api
+        official.ensure_cg_api = lambda _cg_root=None: FakeApi
+        try:
+            distribution = beam_search_game_outcome_distribution(
+                root,
+                config=GameOutcomeSearchConfig(beam_width=8, max_turns=4, max_total_steps=8),
+                player_id=0,
+                choice_filter=lambda _state, choice: choice == (0,),
+            )
+        finally:
+            official.ensure_cg_api = original_ensure_cg_api
+
+        self.assertEqual(distribution.total_case_count, 1)
+        self.assertEqual(distribution.point_case_counts, {(6, 0): 1})
+        self.assertEqual(distribution.point_probabilities, {(6, 0): 1.0})
+
+    def test_game_outcome_sequence_filter_excludes_cases_before_counting(self) -> None:
+        root_state = SimpleNamespace(
+            turn=1,
+            yourIndex=0,
+            result=-1,
+            players=[
+                SimpleNamespace(prize=[object()] * 6),
+                SimpleNamespace(prize=[object()] * 6),
+            ],
+        )
+        root = SimpleNamespace(
+            observation=SimpleNamespace(
+                logs=[],
+                select=SimpleNamespace(
+                    type=0,
+                    context=0,
+                    minCount=1,
+                    maxCount=1,
+                    option=[SimpleNamespace(type=7), SimpleNamespace(type=14)],
+                ),
+                current=root_state,
+            ),
+            searchId=10,
+        )
+
+        class FakeApi:
+            @staticmethod
+            def search_step(_search_id, select):
+                current = SimpleNamespace(
+                    turn=1,
+                    yourIndex=0,
+                    result=select[0],
+                    players=[
+                        SimpleNamespace(prize=[object()] * 6),
+                        SimpleNamespace(prize=[object()] * 6),
+                    ],
+                )
+                return SimpleNamespace(
+                    observation=SimpleNamespace(
+                        logs=[SimpleNamespace(result=select[0], reason=4)],
+                        select=None,
+                        current=current,
+                    ),
+                    searchId=20 + select[0],
+                )
+
+        original_ensure_cg_api = official.ensure_cg_api
+        official.ensure_cg_api = lambda _cg_root=None: FakeApi
+        try:
+            distribution = beam_search_game_outcome_distribution(
+                root,
+                config=GameOutcomeSearchConfig(beam_width=8, max_turns=4, max_total_steps=8),
+                player_id=0,
+                sequence_choice_filter=lambda _state, _choice, sequence, _history: sequence == ((0,),),
+            )
+        finally:
+            official.ensure_cg_api = original_ensure_cg_api
+
+        self.assertEqual(distribution.total_case_count, 1)
+        self.assertEqual(distribution.point_case_counts, {(6, 0): 1})
+
+    def test_game_outcome_absolute_turn_cap_truncates_long_games(self) -> None:
+        root = SimpleNamespace(
+            observation=SimpleNamespace(
+                logs=[],
+                select=SimpleNamespace(
+                    type=0,
+                    context=0,
+                    minCount=1,
+                    maxCount=1,
+                    option=[SimpleNamespace(type=14)],
+                ),
+                current=SimpleNamespace(
+                    turn=17,
+                    yourIndex=0,
+                    result=-1,
+                    players=[
+                        SimpleNamespace(prize=[object()] * 6),
+                        SimpleNamespace(prize=[object()] * 6),
+                    ],
+                ),
+            ),
+            searchId=10,
+        )
+
+        distribution = beam_search_game_outcome_distribution(
+            root,
+            config=GameOutcomeSearchConfig(max_absolute_turn=16),
+            player_id=0,
+        )
+
+        self.assertEqual(distribution.total_case_count, 1)
+        self.assertEqual(distribution.terminal_count, 0)
+        self.assertEqual(distribution.truncated_count, 1)
 
 
 if __name__ == "__main__":

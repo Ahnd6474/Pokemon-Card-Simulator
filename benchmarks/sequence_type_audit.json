@@ -1,0 +1,1186 @@
+{
+  "observed_sequence_type_count": 290,
+  "generated_sequence_type_count": 281,
+  "missing_generated_type_count": 243,
+  "observed_sequence_total": 1118,
+  "generated_sequence_total": 4125,
+  "search_root_count": 16,
+  "top_observed": [
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      119
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      106
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=END",
+      82
+    ],
+    [
+      "select=CARD|context=SETUP_ACTIVE_POKEMON|count=1|options=CARD",
+      67
+    ],
+    [
+      "select=CARD|context=TO_ACTIVE|count=1|options=CARD",
+      66
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACK",
+      56
+    ],
+    [
+      "select=COUNT|context=DRAW_COUNT|count=1|options=NUMBER",
+      20
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      19
+    ],
+    [
+      "select=YES_NO|context=IS_FIRST|count=1|options=YES -> select=CARD|context=SETUP_ACTIVE_POKEMON|count=1|options=CARD",
+      19
+    ],
+    [
+      "select=YES_NO|context=IS_FIRST|count=1|options=NO",
+      14
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      12
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      12
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      12
+    ],
+    [
+      "select=YES_NO|context=IS_FIRST|count=1|options=NO -> select=CARD|context=SETUP_ACTIVE_POKEMON|count=1|options=CARD",
+      11
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=TO_HAND|count=3|options=CARD+CARD+CARD",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=ENERGY|context=DISCARD_ENERGY|count=1|options=ENERGY -> select=ENERGY|context=DISCARD_ENERGY|count=1|options=ENERGY -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ]
+  ],
+  "top_missing_generated": [
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      108
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      96
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      96
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      92
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      90
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      72
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      68
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      66
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      66
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      64
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      60
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      60
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      48
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      48
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      45
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      44
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      40
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      38
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=EVOLVE",
+      38
+    ],
+    [
+      "select=CARD|context=TO_HAND|count=1|options=CARD",
+      36
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      34
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      34
+    ]
+  ],
+  "missing_generated": [
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      108
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      96
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      96
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      92
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      90
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      80
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      72
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      68
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      66
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      66
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      64
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      60
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      60
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      48
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      48
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      45
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      44
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      40
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      38
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=EVOLVE",
+      38
+    ],
+    [
+      "select=CARD|context=TO_HAND|count=1|options=CARD",
+      36
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      34
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      34
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      34
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      34
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      32
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      31
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      30
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      28
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      28
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      28
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      28
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END",
+      28
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      27
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      27
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      27
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      27
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      27
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      26
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      26
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      24
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=TO_HAND|count=3|options=CARD+CARD+CARD",
+      20
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      20
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      20
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      18
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      18
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      18
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      18
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      18
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END",
+      17
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      17
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      17
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      17
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      16
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      15
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      15
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE",
+      14
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      14
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      14
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      14
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      13
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      13
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=EVOLVE",
+      12
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      10
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      9
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      8
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      7
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      6
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      5
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      5
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      5
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      5
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=EVOLVE",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      4
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=3|options=SKILL+SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      3
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=2|options=CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=1|options=CARD",
+      2
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=EVOLVE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ATTACH -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=DISCARD|count=3|options=CARD+CARD+CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=CARD|context=TO_HAND|count=1|options=CARD -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=ABILITY -> select=CARD|context=SWITCH|count=1|options=CARD -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=PLAY -> select=MAIN|context=MAIN|count=1|options=END -> select=SKILL|context=SKILL_ORDER|count=2|options=SKILL+SKILL",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=ATTACK -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      1
+    ],
+    [
+      "select=MAIN|context=MAIN|count=1|options=PLAY -> select=CARD|context=TO_HAND|count=0|options=NONE -> select=MAIN|context=MAIN|count=1|options=END -> select=CARD|context=ATTACH_TO|count=0|options=NONE",
+      1
+    ]
+  ]
+}

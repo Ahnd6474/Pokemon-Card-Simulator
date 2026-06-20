@@ -83,10 +83,15 @@ choices = iter_selection_choices(search_state.observation.select, limit=64)
 Each `SearchChoice` is a tuple of option indices. It can be passed to
 `search_step()` as a list.
 
-## Point distribution
+## Turn sequence distribution
 
-The beam-search helper operates on official `SearchState` objects. It expands
-legal choices through `search_step()` and collects a final destination point:
+The learning unit is a `SelectionSequence`, not a single Search API selection.
+A sequence is the ordered list of option-index choices needed to resolve the
+current line of play until the root player's turn ends.
+
+The turn-sequence beam helper operates on official `SearchState` objects. It
+expands legal choices through `search_step()` and stops when the state crosses
+the turn boundary. Each leaf collects a final destination point:
 
 ```text
 (evaluated_player_points, opponent_points)
@@ -96,57 +101,110 @@ By default, each point is the number of prize cards taken, inferred from the
 remaining prize count.
 
 ```python
-from pokemon_card_simulator import BeamSearchConfig, beam_search_point_distribution
+from pokemon_card_simulator import (
+    TurnSequenceSearchConfig,
+    beam_search_turn_sequence_distribution,
+)
 
-distribution = beam_search_point_distribution(
+distribution = beam_search_turn_sequence_distribution(
     search_state,
-    config=BeamSearchConfig(beam_width=32, max_depth=8),
+    config=TurnSequenceSearchConfig(beam_width=32, max_sequence_steps=12),
     player_id=search_state.observation.current.yourIndex,
 )
 
-print(distribution.probabilities)
+print(distribution.point_probabilities)
+print(distribution.sequence_leaves[:3])
 print(distribution.expected_point())
 ```
 
-The default prior is uniform over legal choices. Pass a policy prior later when
-the model is ready:
+The default prior is uniform over legal choices. Pass a policy prior later when the
+model is ready. The prior is still called at each Search API selection, but the
+returned training sample is the full sequence.
 
 ```python
 def policy_prior(search_state, choices):
     return tuple(model_probability(choice) for choice in choices)
 ```
 
+## Game outcome distribution
+
+For outcome modeling, use `beam_search_game_outcome_distribution()`. It starts
+from an official `SearchState`, expands both players' future selections, and
+stops when the official simulator reports a match result or the configured caps
+are hit. It does not apply a probability prior. It counts retained terminal
+selection-sequence cases and normalizes by the total case count.
+
+```python
+from pokemon_card_simulator import (
+    GameOutcomeSearchConfig,
+    beam_search_game_outcome_distribution,
+)
+
+distribution = beam_search_game_outcome_distribution(
+    search_state,
+    config=GameOutcomeSearchConfig(
+        beam_width=128,
+        max_turns=32,
+        max_total_steps=256,
+        max_choices_per_state=64,
+        max_leaf_count=100_000,
+    ),
+    player_id=search_state.observation.current.yourIndex,
+    choice_filter=lambda state, choice: True,
+)
+
+print(distribution.point_case_counts)
+print(distribution.point_probabilities)
+print(distribution.terminal_count, distribution.truncated_count)
+```
+
+Terminal scoring follows the official result reason:
+
+- prize win (`reason == 1`): keep the prize-card point score
+- deck out, no Active Pokemon, or card-effect win (`reason in {2, 3, 4}`): winner gets max score and loser gets 0
+- draw: `(0, 0)`
+
+Use `choice_filter` to remove choices that should not be counted at all, such as
+obviously non-game-like lines. `beam_width`, `max_choices_per_state`,
+`max_leaf_count`, and `max_turns` are compute caps. They are not probability
+thresholds.
+
 ## Search API benchmark
 
 `benchmarks/benchmark_search_api.py` runs local battles with the official
 `cg.game` module, collects real Search API observations, and times beam
-expansion on those states. By default it skips pre-game setup states, samples
-several points from each game, and writes the raw rows to JSON.
+expansion. By default it runs game-outcome mode. Use `--mode sequence` for the
+one-turn sequence benchmark.
 
 ```powershell
 $env:PYTHONPATH='src'
 $env:PYTHONIOENCODING='utf-8'
-python benchmarks\benchmark_search_api.py --games 4 --snapshots 8 --configs 16x3,32x3,32x5,64x5 --max-choices 64 --out benchmarks\search_api_benchmark.json
+python benchmarks\benchmark_search_api.py --mode game --games 1 --snapshots 1 --configs 8x16 --max-turns 3 --max-choices 8
 ```
 
-Current run on this machine:
+Recent game-outcome smoke run on this machine:
+
+```text
+rows: 1
+mode=game beam=8 steps=16 mean=118.62ms cases_mean=8.0
+```
+
+Recent one-turn sequence run on this machine:
 
 ```text
 rows: 128
 snapshots: 32 from 4 local games
-turn range: 1-24
-option count range: 2-22
+turn range: 1-16
+option count range: 1-17
 
-beam=16 depth=3  mean= 28.66ms p50= 27.38ms max= 54.93ms mass_mean=0.2877
-beam=32 depth=3  mean= 38.99ms p50= 39.28ms max= 91.50ms mass_mean=0.4176
-beam=32 depth=5  mean=128.66ms p50=127.83ms max=251.92ms mass_mean=0.0872
-beam=64 depth=5  mean=221.22ms p50=222.55ms max=355.08ms mass_mean=0.1184
+beam=16 steps=6  mean= 43.97ms p50= 33.56ms max=191.31ms mass_mean=0.6327
+beam=32 steps=6  mean= 67.65ms p50= 50.69ms max=270.22ms mass_mean=0.7389
+beam=32 steps=10 mean=101.12ms p50= 64.57ms max=498.01ms mass_mean=0.7408
+beam=64 steps=10 mean=202.83ms p50= 88.88ms max=818.39ms mass_mean=0.7859
 ```
 
-`mass_mean` is the average retained action-path probability under the current
-uniform prior and beam pruning. The normalized point distribution is still
-returned over the retained leaves, but low mass means the beam is covering only
-a small part of the legal choice tree.
+The sequence benchmark still measures the older one-turn helper. The game
+benchmark is the case-count path.
 
 ## What was removed
 
