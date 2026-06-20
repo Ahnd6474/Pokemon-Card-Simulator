@@ -1,6 +1,11 @@
 from types import SimpleNamespace
 import unittest
 
+from benchmarks.build_state_outcome_dataset import (
+    DeckRecord,
+    exact_hidden_zones_from_visualization,
+    make_terminal_path_rows,
+)
 from pokemon_card_simulator import (
     BeamSearchConfig,
     GameOutcomeSearchConfig,
@@ -13,12 +18,14 @@ from pokemon_card_simulator import (
     encode_game_state,
     ensure_cg_api,
     final_point_from_observation,
+    infer_terminal_result_reason,
     is_turn_boundary,
     iter_selection_choices,
     load_official_attacks,
     load_official_cards,
     normalize_prior,
     outcome_point_from_observation,
+    raw_terminal_result_reason,
     terminal_result_reason,
 )
 import pokemon_card_simulator.official as official
@@ -155,6 +162,120 @@ class OfficialApiTests(unittest.TestCase):
         )
 
         self.assertEqual(outcome_point_from_observation(observation, player_id=0), (6, 4))
+
+    def test_terminal_reason_infers_missing_no_active_result_log(self) -> None:
+        observation = SimpleNamespace(
+            logs=[SimpleNamespace(type=6)],
+            current=SimpleNamespace(
+                result=0,
+                players=[
+                    SimpleNamespace(prize=[object()] * 6, deckCount=12, active=[object()]),
+                    SimpleNamespace(prize=[object()] * 6, deckCount=18, active=[]),
+                ],
+            ),
+        )
+
+        self.assertIsNone(raw_terminal_result_reason(observation))
+        self.assertEqual(infer_terminal_result_reason(observation), 3)
+        self.assertEqual(terminal_result_reason(observation), 3)
+        self.assertEqual(outcome_point_from_observation(observation, player_id=0), (6, 0))
+
+    def test_terminal_reason_infers_missing_prize_result_log(self) -> None:
+        observation = SimpleNamespace(
+            logs=[SimpleNamespace(type=6)],
+            current=SimpleNamespace(
+                result=0,
+                players=[
+                    SimpleNamespace(prize=[], deckCount=12, active=[object()]),
+                    SimpleNamespace(prize=[object()] * 2, deckCount=18, active=[object()]),
+                ],
+            ),
+        )
+
+        self.assertIsNone(raw_terminal_result_reason(observation))
+        self.assertEqual(terminal_result_reason(observation), 1)
+        self.assertEqual(outcome_point_from_observation(observation, player_id=0), (6, 4))
+
+    def test_exact_hidden_zones_from_visualization_uses_full_state_cards(self) -> None:
+        visualized_observation = {
+            "current": {
+                "players": [
+                    {
+                        "deck": [{"id": 10}, {"id": 11}],
+                        "prize": [{"id": 12}],
+                        "hand": [{"id": 13}],
+                        "active": [{"id": 14}],
+                    },
+                    {
+                        "deck": [{"id": 20}],
+                        "prize": [{"id": 21}, {"id": 22}],
+                        "hand": [{"id": 23}, {"id": 24}],
+                        "active": [{"id": 25}],
+                    },
+                ]
+            }
+        }
+
+        zones = exact_hidden_zones_from_visualization(visualized_observation, your_index=0)
+
+        self.assertEqual(
+            zones,
+            {
+                "your_deck": [10, 11],
+                "your_prize": [12],
+                "opponent_deck": [20],
+                "opponent_prize": [21, 22],
+                "opponent_hand": [23, 24],
+                "opponent_active": [25],
+            },
+        )
+
+    def test_terminal_path_rows_include_reason_and_terminal_state_debug_counts(self) -> None:
+        record = SimpleNamespace(game_index=1, step=2)
+        obs = SimpleNamespace(
+            current=SimpleNamespace(
+                turn=3,
+                yourIndex=0,
+                players=[
+                    SimpleNamespace(prize=[object()] * 6),
+                    SimpleNamespace(prize=[object()] * 6),
+                ],
+            )
+        )
+        leaf = SimpleNamespace(
+            terminal=True,
+            point=(6, 0),
+            case_count=3,
+            state_history=((0.1, 0.0, 1.0, 1.0, 0.0), (0.2, 0.0, 1.0, 1.0, 0.0)),
+            card_instance_history=((), ()),
+            terminal_reason=3,
+            inferred_terminal_reason=3,
+            raw_terminal_reason=None,
+            terminal_active_counts=(1, 0),
+            terminal_deck_counts=(12, 18),
+            terminal_prize_counts=(6, 6),
+        )
+        distribution = SimpleNamespace(
+            outcome_leaves=(leaf,),
+            terminal_case_count=3,
+            total_case_count=3,
+            truncated_case_count=0,
+            leaf_count=1,
+        )
+        deck = DeckRecord("a", "deck-a", "source", tuple([1] * 60))
+        args = SimpleNamespace(beam_width=4, search_steps=8, ranking_profile="generation", filter_profile="none")
+
+        rows = make_terminal_path_rows(record, obs, deck, deck, distribution, args, "visualize_data")
+
+        self.assertEqual(len(rows), 1)
+        search_quality = rows[0]["target"]["search_quality"]
+        self.assertEqual(search_quality["terminal_reason_counts"], {"3": 3})
+        self.assertEqual(search_quality["inferred_reason_counts"], {"3": 3})
+        self.assertEqual(search_quality["raw_terminal_reason_counts"], {"none": 3})
+        self.assertEqual(search_quality["active_count_counts"], {"1:0": 3})
+        self.assertEqual(search_quality["deck_count_counts"], {"12:18": 3})
+        self.assertEqual(search_quality["prize_count_counts"], {"6:6": 3})
+        self.assertEqual(rows[0]["search"]["hidden_zone_source"], "visualize_data")
 
     def test_point_distribution_expected_point(self) -> None:
         distribution = PointDistribution({(1, 0): 0.25, (2, 1): 0.75}, 1.0, 2)

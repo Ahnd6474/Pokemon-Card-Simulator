@@ -100,6 +100,7 @@ class ObservationRecord:
     game_index: int
     step: int
     observation: object
+    visualized_observation: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -223,20 +224,34 @@ def collect_observations(
     max_steps: int,
     *,
     include_setup: bool,
+    include_prize_progress: bool = False,
+    include_visualization: bool = False,
 ) -> list[ObservationRecord]:
     observations: list[ObservationRecord] = []
     for step in range(max_steps):
         if obs_dict["current"]["result"] >= 0:
             break
         obs = api.to_observation_class(obs_dict)
-        if is_benchmarkable_observation(obs, include_setup=include_setup):
-            observations.append(ObservationRecord(game_index, step, obs))
+        if is_benchmarkable_observation(obs, include_setup=include_setup, include_prize_progress=include_prize_progress):
+            visualized_observation = latest_visualized_observation(game) if include_visualization else None
+            observations.append(ObservationRecord(game_index, step, obs, visualized_observation))
         select = obs_dict["select"]
         if select is None:
             raise RuntimeError("deck selection observation was not expected after battle_start")
         action = random_legal_action(select)
         obs_dict = game.battle_select(action)
     return observations
+
+
+def latest_visualized_observation(game) -> dict[str, Any] | None:
+    visualize_data = getattr(game, "visualize_data", None)
+    if visualize_data is None:
+        return None
+    data = json.loads(visualize_data())
+    if not isinstance(data, list) or not data:
+        return None
+    latest = data[-1]
+    return latest if isinstance(latest, dict) else None
 
 
 def random_legal_action(select: dict) -> list[int]:
@@ -247,7 +262,7 @@ def random_legal_action(select: dict) -> list[int]:
     return random.sample(range(option_count), count)
 
 
-def is_benchmarkable_observation(obs, *, include_setup: bool) -> bool:
+def is_benchmarkable_observation(obs, *, include_setup: bool, include_prize_progress: bool = False) -> bool:
     if obs.select is None or len(obs.select.option) == 0:
         return False
     state = obs.current
@@ -257,7 +272,11 @@ def is_benchmarkable_observation(obs, *, include_setup: bool) -> bool:
         return True
     if state.turn < 1:
         return False
-    return all(len(player.prize) == 6 and player.handCount > 0 for player in state.players)
+    if not all(player.handCount > 0 for player in state.players):
+        return False
+    if include_prize_progress:
+        return True
+    return all(len(player.prize) == 6 for player in state.players)
 
 
 def evenly_spaced(values: list[ObservationRecord], limit: int) -> list[ObservationRecord]:

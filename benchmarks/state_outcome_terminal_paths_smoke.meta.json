@@ -1,8 +1,8 @@
 {
-  "rows": 10,
+  "rows": 1,
   "root_observations": 4,
-  "rows_skipped_no_terminal": 2,
-  "elapsed_seconds": 13.722,
+  "rows_skipped_no_terminal": 3,
+  "elapsed_seconds": 15.424,
   "deck_count": 4,
   "state_feature_names": [
     "turn_norm",
@@ -95,7 +95,7 @@
     "status_poisoned"
   ],
   "config": {
-    "deck_files": "decks/accepted_decks.json,decks/overlap_decks.json",
+    "deck_files": "decks\\accepted_decks.json",
     "max_decks": 4,
     "games": 2,
     "snapshots": 2,

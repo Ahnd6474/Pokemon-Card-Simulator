@@ -25,6 +25,7 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=800)
     parser.add_argument("--lr", type=float, default=0.02)
     parser.add_argument("--seed", type=int, default=1)
+    parser.add_argument("--holdout-ratio", type=float, default=0.2)
     parser.add_argument("--out", default="benchmarks/card_autoencoder_dim16.json")
     args = parser.parse_args()
 
@@ -32,13 +33,20 @@ def main() -> None:
     api = ensure_cg_api()
     cards = api.all_card_data()
     attacks = {int(attack.attackId): attack for attack in api.all_attack()}
-    feature_names, x, card_ids = build_card_features(cards, attacks)
-    mean = x.mean(axis=0)
-    std = x.std(axis=0)
+    feature_names, x, card_ids, groups = build_card_features(cards, attacks)
+    order = rng.permutation(len(card_ids))
+    split = max(1, min(len(order) - 1, int(round(len(order) * (1.0 - args.holdout_ratio)))))
+    train_indices = order[:split]
+    holdout_indices = order[split:]
+    mean = x[train_indices].mean(axis=0)
+    std = x[train_indices].std(axis=0)
     std[std < 1e-8] = 1.0
     normalized = (x - mean) / std
-    model = train_autoencoder(normalized, args.dim, args.epochs, args.lr, rng)
-    embeddings = model["encoded"]
+    model = train_autoencoder(normalized[train_indices], args.dim, args.epochs, args.lr, rng)
+    embeddings = encode(normalized, model)
+    reconstructed = decode(embeddings, model)
+    train_metrics = evaluate(normalized[train_indices], reconstructed[train_indices], x[train_indices], denormalize(reconstructed[train_indices], mean, std), groups)
+    holdout_metrics = evaluate(normalized[holdout_indices], reconstructed[holdout_indices], x[holdout_indices], denormalize(reconstructed[holdout_indices], mean, std), groups)
     payload = {
         "kind": "card-fixed-info-autoencoder-v1",
         "dim": args.dim,
@@ -53,15 +61,21 @@ def main() -> None:
             str(card_id): embedding.round(8).tolist()
             for card_id, embedding in zip(card_ids, embeddings, strict=True)
         },
-        "train": {"mse": round(float(model["mse"]), 8)},
+        "train": train_metrics,
+        "holdout": holdout_metrics,
     }
     out_path = ROOT / args.out
     out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print(f"cards={len(card_ids)} features={x.shape[1]} dim={args.dim} mse={model['mse']:.6f}")
+    print(f"cards={len(card_ids)} features={x.shape[1]} dim={args.dim}")
+    print("train", train_metrics)
+    print("holdout", holdout_metrics)
     print(f"wrote {out_path}")
 
 
-def build_card_features(cards: list[Any], attacks: dict[int, Any]) -> tuple[list[str], np.ndarray, list[int]]:
+def build_card_features(
+    cards: list[Any],
+    attacks: dict[int, Any],
+) -> tuple[list[str], np.ndarray, list[int], dict[str, Any]]:
     card_types = sorted({safe_int(card.cardType) for card in cards})
     energy_types = sorted({safe_int(card.energyType) for card in cards})
     weakness_types = sorted({safe_int(card.weakness) for card in cards})
@@ -82,10 +96,16 @@ def build_card_features(cards: list[Any], attacks: dict[int, Any]) -> tuple[list
         "attack_damage_max_norm",
         "attack_energy_count_sum_norm",
     ]
-    feature_names += [f"card_type_{value}" for value in card_types]
-    feature_names += [f"energy_type_{value}" for value in energy_types]
-    feature_names += [f"weakness_{value}" for value in weakness_types]
-    feature_names += [f"resistance_{value}" for value in resistance_types]
+    binary_indices = list(range(2, 9))
+    categorical_groups = {}
+    feature_names += group_feature_names("card_type", card_types)
+    categorical_groups["card_type"] = list(range(len(feature_names) - len(card_types), len(feature_names)))
+    feature_names += group_feature_names("energy_type", energy_types)
+    categorical_groups["energy_type"] = list(range(len(feature_names) - len(energy_types), len(feature_names)))
+    feature_names += group_feature_names("weakness", weakness_types)
+    categorical_groups["weakness"] = list(range(len(feature_names) - len(weakness_types), len(feature_names)))
+    feature_names += group_feature_names("resistance", resistance_types)
+    categorical_groups["resistance"] = list(range(len(feature_names) - len(resistance_types), len(feature_names)))
     rows = []
     card_ids = []
     for card in cards:
@@ -114,7 +134,12 @@ def build_card_features(cards: list[Any], attacks: dict[int, Any]) -> tuple[list
         row += one_hot(safe_int(card.resistance), resistance_types)
         rows.append(row)
         card_ids.append(int(card.cardId))
-    return feature_names, np.array(rows, dtype=np.float64), card_ids
+    groups = {
+        "numeric": [0, 1, 9, 10, 11, 12, 13],
+        "binary": binary_indices,
+        "categorical": categorical_groups,
+    }
+    return feature_names, np.array(rows, dtype=np.float64), card_ids, groups
 
 
 def train_autoencoder(
@@ -145,21 +170,56 @@ def train_autoencoder(
         encoder_bias -= lr * grad_encoder_bias
         decoder_weight -= lr * grad_decoder_weight
         decoder_bias -= lr * grad_decoder_bias
-    encoded = np.tanh(x @ encoder_weight + encoder_bias)
-    reconstructed = encoded @ decoder_weight + decoder_bias
-    mse = float(np.mean((reconstructed - x) ** 2))
     return {
         "encoder_weight": encoder_weight,
         "encoder_bias": encoder_bias,
         "decoder_weight": decoder_weight,
         "decoder_bias": decoder_bias,
-        "encoded": encoded,
-        "mse": mse,
+    }
+
+
+def encode(x: np.ndarray, model: dict[str, np.ndarray]) -> np.ndarray:
+    return np.tanh(x @ model["encoder_weight"] + model["encoder_bias"])
+
+
+def decode(encoded: np.ndarray, model: dict[str, np.ndarray]) -> np.ndarray:
+    return encoded @ model["decoder_weight"] + model["decoder_bias"]
+
+
+def denormalize(x: np.ndarray, mean: np.ndarray, std: np.ndarray) -> np.ndarray:
+    return x * std + mean
+
+
+def evaluate(
+    normalized_target: np.ndarray,
+    normalized_prediction: np.ndarray,
+    raw_target: np.ndarray,
+    raw_prediction: np.ndarray,
+    groups: dict[str, Any],
+) -> dict[str, Any]:
+    binary_target = raw_target[:, groups["binary"]] >= 0.5
+    binary_prediction = raw_prediction[:, groups["binary"]] >= 0.5
+    categorical = {}
+    for name, indices in groups["categorical"].items():
+        categorical[name] = round(float(np.mean(np.argmax(raw_prediction[:, indices], axis=1) == np.argmax(raw_target[:, indices], axis=1))), 6)
+    return {
+        "normalized_mse": round(float(np.mean((normalized_prediction - normalized_target) ** 2)), 8),
+        "numeric_mse": round(float(np.mean((raw_prediction[:, groups["numeric"]] - raw_target[:, groups["numeric"]]) ** 2)), 8),
+        "binary_accuracy": round(float(np.mean(binary_prediction == binary_target)), 6),
+        "categorical_accuracy": categorical,
     }
 
 
 def one_hot(value: int, values: list[int]) -> list[float]:
     return [float(value == current) for current in values]
+
+
+def group_feature_names(prefix: str, values: list[int]) -> list[str]:
+    return [f"{prefix}_{category_name(value)}" for value in values]
+
+
+def category_name(value: int) -> str:
+    return "none" if value < 0 else str(value)
 
 
 def safe_int(value: Any) -> int:

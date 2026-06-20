@@ -52,6 +52,7 @@ def main() -> None:
     parser.add_argument("--max-decks", type=int, default=0)
     parser.add_argument("--games", type=int, default=8)
     parser.add_argument("--snapshots", type=int, default=4)
+    parser.add_argument("--snapshot-strategy", choices=("evenly-spaced", "prize-stratified"), default="prize-stratified")
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--max-collect-steps", type=int, default=180)
     parser.add_argument("--beam-width", type=int, default=64)
@@ -99,6 +100,7 @@ def main() -> None:
     rows_written = 0
     rows_skipped_no_terminal = 0
     root_observations = 0
+    root_prize_bucket_counts: Counter[int] = Counter()
     started = time.perf_counter()
     with out_path.open("w", encoding="utf-8") as out_file:
         for game_index in range(args.games):
@@ -116,10 +118,24 @@ def main() -> None:
                     game_index,
                     args.max_collect_steps,
                     include_setup=False,
+                    include_prize_progress=args.snapshot_strategy == "prize-stratified",
+                    include_visualization=True,
                 )
-                for record in evenly_spaced(observations, args.snapshots):
+                for record in select_observation_records(
+                    observations,
+                    args.snapshots,
+                    args.snapshot_strategy,
+                    max_absolute_turn=args.max_absolute_turn,
+                ):
                     obs = record.observation
-                    root = begin_search_with_decks(api, obs, your_deck.cards, opponent_deck.cards)
+                    root_prize_bucket_counts[total_prize_taken(obs)] += 1
+                    root, hidden_zone_source = begin_search_with_decks(
+                        api,
+                        obs,
+                        your_deck.cards,
+                        opponent_deck.cards,
+                        getattr(record, "visualized_observation", None),
+                    )
                     node_ranker = make_node_ranker(
                         api,
                         args.ranking_profile,
@@ -141,7 +157,15 @@ def main() -> None:
                     if distribution.terminal_case_count < args.min_terminal_case_count:
                         rows_skipped_no_terminal += 1
                         continue
-                    rows = make_terminal_path_rows(record, obs, your_deck, opponent_deck, distribution, args)
+                    rows = make_terminal_path_rows(
+                        record,
+                        obs,
+                        your_deck,
+                        opponent_deck,
+                        distribution,
+                        args,
+                        hidden_zone_source,
+                    )
                     for row in rows:
                         out_file.write(json.dumps(row, separators=(",", ":")) + "\n")
                     rows_written += len(rows)
@@ -152,6 +176,7 @@ def main() -> None:
         "rows": rows_written,
         "root_observations": root_observations,
         "rows_skipped_no_terminal": rows_skipped_no_terminal,
+        "root_prize_bucket_counts": dict(sorted(root_prize_bucket_counts.items())),
         "elapsed_seconds": round(time.perf_counter() - started, 3),
         "deck_count": len(decks),
         "state_feature_names": STATE_FEATURE_NAMES,
@@ -206,23 +231,145 @@ def expand_deck(deck: dict[str, Any]) -> list[int]:
     return cards
 
 
-def begin_search_with_decks(api: Any, obs: Any, your_deck: tuple[int, ...], opponent_deck: tuple[int, ...]) -> Any:
+def begin_search_with_decks(
+    api: Any,
+    obs: Any,
+    your_deck: tuple[int, ...],
+    opponent_deck: tuple[int, ...],
+    visualized_observation: dict[str, Any] | None = None,
+) -> tuple[Any, str]:
     state = obs.current
     your_index = state.yourIndex
     opponent_index = 1 - your_index
+    exact_zones = exact_hidden_zones_from_visualization(visualized_observation, your_index)
+    if exact_zones is not None:
+        opponent_active = []
+        if state.players[opponent_index].active and state.players[opponent_index].active[0] is None:
+            opponent_active = exact_zones["opponent_active"]
+        return (
+            api.search_begin(
+                obs,
+                your_deck=exact_zones["your_deck"],
+                your_prize=exact_zones["your_prize"],
+                opponent_deck=exact_zones["opponent_deck"],
+                opponent_prize=exact_zones["opponent_prize"],
+                opponent_hand=exact_zones["opponent_hand"],
+                opponent_active=opponent_active,
+            ),
+            "visualize_data",
+        )
+
     player_decks = (your_deck, opponent_deck)
     opponent_active = []
     if state.players[opponent_index].active and state.players[opponent_index].active[0] is None:
         opponent_active = [player_decks[opponent_index][0]]
-    return api.search_begin(
-        obs,
-        your_deck=list(player_decks[your_index][: state.players[your_index].deckCount]),
-        your_prize=list(player_decks[your_index][: len(state.players[your_index].prize)]),
-        opponent_deck=list(player_decks[opponent_index][: state.players[opponent_index].deckCount]),
-        opponent_prize=list(player_decks[opponent_index][: len(state.players[opponent_index].prize)]),
-        opponent_hand=list(player_decks[opponent_index][: state.players[opponent_index].handCount]),
-        opponent_active=opponent_active,
+    return (
+        api.search_begin(
+            obs,
+            your_deck=list(player_decks[your_index][: state.players[your_index].deckCount]),
+            your_prize=list(player_decks[your_index][: len(state.players[your_index].prize)]),
+            opponent_deck=list(player_decks[opponent_index][: state.players[opponent_index].deckCount]),
+            opponent_prize=list(player_decks[opponent_index][: len(state.players[opponent_index].prize)]),
+            opponent_hand=list(player_decks[opponent_index][: state.players[opponent_index].handCount]),
+            opponent_active=opponent_active,
+        ),
+        "deck_prefix_fallback",
     )
+
+
+def exact_hidden_zones_from_visualization(
+    visualized_observation: dict[str, Any] | None,
+    your_index: int,
+) -> dict[str, list[int]] | None:
+    if not isinstance(visualized_observation, dict):
+        return None
+    current = visualized_observation.get("current")
+    if not isinstance(current, dict):
+        return None
+    players = current.get("players")
+    if not isinstance(players, list) or len(players) < 2:
+        return None
+    opponent_index = 1 - your_index
+    your_player = players[your_index]
+    opponent_player = players[opponent_index]
+    if not isinstance(your_player, dict) or not isinstance(opponent_player, dict):
+        return None
+    return {
+        "your_deck": card_ids(your_player.get("deck")),
+        "your_prize": card_ids(your_player.get("prize")),
+        "opponent_deck": card_ids(opponent_player.get("deck")),
+        "opponent_prize": card_ids(opponent_player.get("prize")),
+        "opponent_hand": card_ids(opponent_player.get("hand")),
+        "opponent_active": card_ids(opponent_player.get("active")),
+    }
+
+
+def card_ids(cards: Any) -> list[int]:
+    if not isinstance(cards, list):
+        return []
+    values: list[int] = []
+    for card in cards:
+        if not isinstance(card, dict):
+            continue
+        try:
+            values.append(int(card["id"]))
+        except (KeyError, TypeError, ValueError):
+            continue
+    return values
+
+
+def select_observation_records(
+    observations: list[Any],
+    limit: int,
+    strategy: str,
+    *,
+    max_absolute_turn: int,
+) -> list[Any]:
+    observations = [
+        record for record in observations
+        if max_absolute_turn <= 0 or int(record.observation.current.turn) <= max_absolute_turn
+    ]
+    if strategy == "evenly-spaced":
+        return evenly_spaced(observations, limit)
+    if strategy != "prize-stratified":
+        raise ValueError(f"unsupported snapshot strategy: {strategy}")
+    return prize_stratified(observations, limit)
+
+
+def prize_stratified(observations: list[Any], limit: int) -> list[Any]:
+    if limit <= 0 or len(observations) <= limit:
+        return observations
+    buckets: dict[int, list[Any]] = {}
+    for record in observations:
+        buckets.setdefault(total_prize_taken(record.observation), []).append(record)
+    selected: list[Any] = []
+    bucket_ids = sorted(buckets)
+    if len(bucket_ids) > limit:
+        last = len(bucket_ids) - 1
+        bucket_ids = [bucket_ids[round(index * last / (limit - 1))] for index in range(limit)]
+    for bucket_id in bucket_ids:
+        records = buckets[bucket_id]
+        selected.append(records[len(records) // 2])
+    if len(selected) < limit:
+        selected_keys = {(record.game_index, record.step) for record in selected}
+        for record in evenly_spaced(observations, limit * 2):
+            key = (record.game_index, record.step)
+            if key in selected_keys:
+                continue
+            selected.append(record)
+            selected_keys.add(key)
+            if len(selected) >= limit:
+                break
+    return sorted(selected[:limit], key=lambda record: record.step)
+
+
+def total_prize_taken(obs: Any, starting_prize_count: int = 6) -> int:
+    current = obs.current
+    return sum(max(0, starting_prize_count - len(player.prize)) for player in current.players)
+
+
+def player_prize_taken(obs: Any, player_id: int, starting_prize_count: int = 6) -> int:
+    return max(0, starting_prize_count - len(obs.current.players[player_id].prize))
 
 
 def make_row(
@@ -288,20 +435,28 @@ def make_terminal_path_rows(
     opponent_deck: DeckRecord,
     distribution: Any,
     args: argparse.Namespace,
+    hidden_zone_source: str,
 ) -> list[dict[str, Any]]:
     aggregates: dict[tuple[float, ...], dict[str, Any]] = {}
     for leaf in distribution.outcome_leaves:
         if not leaf.terminal:
             continue
-        for depth, state in enumerate(leaf.state_history):
-            key = state_key(state)
+        for depth, state in enumerate(leaf.state_history[:-1]):
+            masked_state = mask_result_features(state)
+            key = state_key(masked_state)
             cards = leaf.card_instance_history[depth] if depth < len(leaf.card_instance_history) else ()
             aggregate = aggregates.setdefault(
                 key,
                 {
-                    "state": tuple(state),
+                    "state": tuple(masked_state),
                     "cards": tuple(cards),
                     "point_counts": Counter(),
+                    "terminal_reason_counts": Counter(),
+                    "inferred_reason_counts": Counter(),
+                    "raw_terminal_reason_counts": Counter(),
+                    "active_count_counts": Counter(),
+                    "deck_count_counts": Counter(),
+                    "prize_count_counts": Counter(),
                     "terminal_case_count": 0,
                     "terminal_leaf_count": 0,
                     "min_path_depth": depth,
@@ -309,6 +464,12 @@ def make_terminal_path_rows(
                 },
             )
             aggregate["point_counts"][leaf.point] += leaf.case_count
+            aggregate["terminal_reason_counts"][leaf.terminal_reason] += leaf.case_count
+            aggregate["inferred_reason_counts"][leaf.inferred_terminal_reason] += leaf.case_count
+            aggregate["raw_terminal_reason_counts"][leaf.raw_terminal_reason] += leaf.case_count
+            aggregate["active_count_counts"][leaf.terminal_active_counts] += leaf.case_count
+            aggregate["deck_count_counts"][leaf.terminal_deck_counts] += leaf.case_count
+            aggregate["prize_count_counts"][leaf.terminal_prize_counts] += leaf.case_count
             aggregate["terminal_case_count"] += leaf.case_count
             aggregate["terminal_leaf_count"] += 1
             aggregate["min_path_depth"] = min(aggregate["min_path_depth"], depth)
@@ -316,7 +477,10 @@ def make_terminal_path_rows(
 
     terminal_case_rate = safe_ratio(distribution.terminal_case_count, distribution.total_case_count)
     truncated_case_rate = safe_ratio(distribution.truncated_case_count, distribution.total_case_count)
+    root_debug_counts = distribution_debug_counts(distribution)
     rows = []
+    root_player_id = int(obs.current.yourIndex)
+    root_opponent_id = 1 - root_player_id
     for state_index, aggregate in enumerate(aggregates.values()):
         point_counts = dict(sorted(aggregate["point_counts"].items()))
         point_probabilities = normalize_counts(point_counts)
@@ -327,7 +491,10 @@ def make_terminal_path_rows(
                 "root_step": record.step,
                 "state_index": state_index,
                 "turn": int(obs.current.turn),
-                "your_index": int(obs.current.yourIndex),
+                "your_index": root_player_id,
+                "root_self_prize_taken": player_prize_taken(obs, root_player_id),
+                "root_opponent_prize_taken": player_prize_taken(obs, root_opponent_id),
+                "root_total_prize_taken": total_prize_taken(obs),
                 "your_deck_id": your_deck.deck_id,
                 "opponent_deck_id": opponent_deck.deck_id,
                 "your_deck_name": your_deck.deck_name,
@@ -361,6 +528,18 @@ def make_terminal_path_rows(
                         "state_terminal_leaf_count": aggregate["terminal_leaf_count"],
                         "min_path_depth": aggregate["min_path_depth"],
                         "max_path_depth": aggregate["max_path_depth"],
+                        "terminal_reason_counts": encode_optional_int_counts(aggregate["terminal_reason_counts"]),
+                        "inferred_reason_counts": encode_optional_int_counts(aggregate["inferred_reason_counts"]),
+                        "raw_terminal_reason_counts": encode_optional_int_counts(aggregate["raw_terminal_reason_counts"]),
+                        "active_count_counts": encode_pair_counts(aggregate["active_count_counts"]),
+                        "deck_count_counts": encode_pair_counts(aggregate["deck_count_counts"]),
+                        "prize_count_counts": encode_pair_counts(aggregate["prize_count_counts"]),
+                        "root_terminal_reason_counts": root_debug_counts["terminal_reason_counts"],
+                        "root_inferred_reason_counts": root_debug_counts["inferred_reason_counts"],
+                        "root_raw_terminal_reason_counts": root_debug_counts["raw_terminal_reason_counts"],
+                        "root_active_count_counts": root_debug_counts["active_count_counts"],
+                        "root_deck_count_counts": root_debug_counts["deck_count_counts"],
+                        "root_prize_count_counts": root_debug_counts["prize_count_counts"],
                     },
                     "root_total_case_count": distribution.total_case_count,
                     "root_terminal_case_count": distribution.terminal_case_count,
@@ -373,14 +552,49 @@ def make_terminal_path_rows(
                     "ranking_profile": args.ranking_profile,
                     "filter_profile": args.filter_profile,
                     "source": "terminal_path_state",
+                    "hidden_zone_source": hidden_zone_source,
                 },
             }
         )
     return rows
 
 
+def distribution_debug_counts(distribution: Any) -> dict[str, dict[str, int]]:
+    terminal_reason_counts: Counter[int | None] = Counter()
+    inferred_reason_counts: Counter[int | None] = Counter()
+    raw_terminal_reason_counts: Counter[int | None] = Counter()
+    active_count_counts: Counter[tuple[int, int]] = Counter()
+    deck_count_counts: Counter[tuple[int, int]] = Counter()
+    prize_count_counts: Counter[tuple[int, int]] = Counter()
+    for leaf in distribution.outcome_leaves:
+        if not leaf.terminal:
+            continue
+        terminal_reason_counts[leaf.terminal_reason] += leaf.case_count
+        inferred_reason_counts[leaf.inferred_terminal_reason] += leaf.case_count
+        raw_terminal_reason_counts[leaf.raw_terminal_reason] += leaf.case_count
+        active_count_counts[leaf.terminal_active_counts] += leaf.case_count
+        deck_count_counts[leaf.terminal_deck_counts] += leaf.case_count
+        prize_count_counts[leaf.terminal_prize_counts] += leaf.case_count
+    return {
+        "terminal_reason_counts": encode_optional_int_counts(terminal_reason_counts),
+        "inferred_reason_counts": encode_optional_int_counts(inferred_reason_counts),
+        "raw_terminal_reason_counts": encode_optional_int_counts(raw_terminal_reason_counts),
+        "active_count_counts": encode_pair_counts(active_count_counts),
+        "deck_count_counts": encode_pair_counts(deck_count_counts),
+        "prize_count_counts": encode_pair_counts(prize_count_counts),
+    }
+
+
 def state_key(state: tuple[float, ...]) -> tuple[float, ...]:
     return tuple(round(value, 6) for value in state)
+
+
+def mask_result_features(state: tuple[float, ...]) -> tuple[float, ...]:
+    values = list(state)
+    for index in (2, 3, 4):
+        if index < len(values):
+            values[index] = 0.0
+    return tuple(values)
 
 
 def terminal_point_counts(distribution: Any) -> dict[tuple[int, int], int]:
@@ -413,6 +627,22 @@ def encode_point_counts(point_case_counts: dict[tuple[int, int], int]) -> dict[s
 
 def encode_point_probabilities(point_probabilities: dict[tuple[int, int], float]) -> dict[str, float]:
     return {f"{point[0]}:{point[1]}": probability for point, probability in point_probabilities.items()}
+
+
+def encode_optional_int_counts(counts: Counter[int | None]) -> dict[str, int]:
+    return {
+        "none" if key is None else str(int(key)): int(value)
+        for key, value in sorted(counts.items(), key=lambda item: (-1 if item[0] is None else int(item[0])))
+        if value > 0
+    }
+
+
+def encode_pair_counts(counts: Counter[tuple[int, int]]) -> dict[str, int]:
+    return {
+        f"{key[0]}:{key[1]}": int(value)
+        for key, value in sorted(counts.items())
+        if value > 0
+    }
 
 
 def load_json(path: str) -> dict[str, Any]:

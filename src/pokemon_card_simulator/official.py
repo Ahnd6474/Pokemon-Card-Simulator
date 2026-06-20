@@ -225,6 +225,11 @@ class GameOutcomeLeaf:
     truncated: bool
     turns_crossed: int
     terminal_reason: int | None
+    raw_terminal_reason: int | None
+    inferred_terminal_reason: int | None
+    terminal_active_counts: tuple[int, int]
+    terminal_deck_counts: tuple[int, int]
+    terminal_prize_counts: tuple[int, int]
     sequence_history: tuple[SelectionSequence, ...]
     step_key_history: tuple[tuple[StepKey, ...], ...]
     state_history: tuple[tuple[float, ...], ...]
@@ -345,7 +350,7 @@ def final_point_from_observation(observation: Any, player_id: int, starting_priz
     )
 
 
-def terminal_result_reason(observation: Any) -> int | None:
+def raw_terminal_result_reason(observation: Any) -> int | None:
     """Return official RESULT reason from observation logs when present."""
 
     for log in reversed(getattr(observation, "logs", ()) or ()):
@@ -354,6 +359,32 @@ def terminal_result_reason(observation: Any) -> int | None:
         if result is not None and reason is not None:
             return int(reason)
     return None
+
+
+def terminal_result_reason(observation: Any) -> int | None:
+    """Return official RESULT reason, inferring Search API terminal states when needed."""
+
+    reason = raw_terminal_result_reason(observation)
+    if reason is not None:
+        return reason
+    return infer_terminal_result_reason(observation)
+
+
+def infer_terminal_result_reason(observation: Any) -> int | None:
+    current = getattr(observation, "current", None)
+    if current is None or int(getattr(current, "result", -1)) < 0:
+        return None
+    result = int(current.result)
+    if result == 2:
+        return None
+    if winner_has_no_prizes(observation, result):
+        return 1
+    loser_id = 1 - result
+    if player_has_empty_deck(current, loser_id):
+        return 2
+    if player_has_no_active_pokemon(current, loser_id):
+        return 3
+    return 4
 
 
 def outcome_point_from_observation(observation: Any, player_id: int, starting_prize_count: int = 6) -> Point:
@@ -368,12 +399,34 @@ def outcome_point_from_observation(observation: Any, player_id: int, starting_pr
         return (0, 0)
 
     reason = terminal_result_reason(observation)
-    if reason == 1:
+    if reason == 1 or winner_has_no_prizes(observation, result):
         return final_point_from_observation(observation, player_id, starting_prize_count)
 
     if result == player_id:
         return (starting_prize_count, 0)
     return (0, starting_prize_count)
+
+
+def winner_has_no_prizes(observation: Any, winner_id: int) -> bool:
+    players = getattr(getattr(observation, "current", None), "players", ())
+    if winner_id < 0 or winner_id >= len(players):
+        return False
+    return len(getattr(players[winner_id], "prize", ()) or ()) == 0
+
+
+def player_has_empty_deck(current: Any, player_id: int) -> bool:
+    players = getattr(current, "players", ())
+    if player_id < 0 or player_id >= len(players):
+        return False
+    return int(getattr(players[player_id], "deckCount", 1)) <= 0
+
+
+def player_has_no_active_pokemon(current: Any, player_id: int) -> bool:
+    players = getattr(current, "players", ())
+    if player_id < 0 or player_id >= len(players):
+        return False
+    active = tuple(getattr(players[player_id], "active", ()) or ())
+    return not any(pokemon is not None for pokemon in active)
 
 
 def default_point_fn(search_state: Any, player_id: int, starting_prize_count: int) -> Point:
@@ -470,13 +523,13 @@ def append_player_card_instances(tokens: list[dict[str, Any]], player: Any, *, o
     status_features = player_status_features(player)
     if owner == 0:
         for position, card in enumerate(tuple(getattr(player, "hand", ()) or ())):
-            append_card_instance(tokens, card, owner, "hand", "standalone", position, status_features=status_features)
+            append_card_instance(tokens, card, owner, "hand", position, status_features=status_features)
     for position, pokemon in enumerate(active):
         append_pokemon_instance(tokens, pokemon, owner, "active", position, status_features)
     for position, pokemon in enumerate(bench):
         append_pokemon_instance(tokens, pokemon, owner, "bench", position, status_features)
     for position, card in enumerate(tuple(getattr(player, "discard", ()) or ())):
-        append_card_instance(tokens, card, owner, "discard", "standalone", position, status_features=status_features)
+        append_card_instance(tokens, card, owner, "discard", position, status_features=status_features)
 
 
 def append_pokemon_instance(
@@ -496,7 +549,6 @@ def append_pokemon_instance(
         pokemon,
         owner,
         zone,
-        "pokemon",
         position,
         card_id=card_id,
         attached_to_card_id=0,
@@ -508,7 +560,6 @@ def append_pokemon_instance(
             energy,
             owner,
             "attached_energy",
-            "attached_energy",
             energy_index,
             attached_to_card_id=card_id,
         )
@@ -518,7 +569,6 @@ def append_pokemon_instance(
             tool,
             owner,
             "tool",
-            "tool",
             tool_index,
             attached_to_card_id=card_id,
         )
@@ -527,7 +577,6 @@ def append_pokemon_instance(
             tokens,
             pre_evolution,
             owner,
-            "pre_evolution",
             "pre_evolution",
             evolution_index,
             attached_to_card_id=card_id,
@@ -539,7 +588,6 @@ def append_card_instance(
     card: Any,
     owner: int,
     zone: str,
-    _role: str,
     position: int,
     *,
     card_id: int | None = None,
@@ -1087,6 +1135,9 @@ def make_game_outcome_leaf(
 ) -> GameOutcomeLeaf:
     observation = node.search_state.observation
     current = observation.current
+    raw_reason = raw_terminal_result_reason(observation)
+    terminal_reason = terminal_result_reason(observation)
+    inferred_reason = terminal_reason if raw_reason is None else None
     sequence_history = node.sequence_history
     step_key_history = node.step_key_history
     if node.current_sequence:
@@ -1100,12 +1151,44 @@ def make_game_outcome_leaf(
         terminal=current.result >= 0,
         truncated=truncated,
         turns_crossed=node.turns_crossed,
-        terminal_reason=terminal_result_reason(observation),
+        terminal_reason=terminal_reason,
+        raw_terminal_reason=raw_reason,
+        inferred_terminal_reason=inferred_reason,
+        terminal_active_counts=player_active_counts(current),
+        terminal_deck_counts=player_deck_counts(current),
+        terminal_prize_counts=player_prize_counts(current),
         sequence_history=sequence_history,
         step_key_history=step_key_history,
         state_history=node.state_history,
         card_instance_history=node.card_instance_history,
     )
+
+
+def player_active_counts(current: Any) -> tuple[int, int]:
+    players = tuple(getattr(current, "players", ()) or ())
+    counts = []
+    for player in players[:2]:
+        active = tuple(getattr(player, "active", ()) or ())
+        counts.append(sum(1 for pokemon in active if pokemon is not None))
+    while len(counts) < 2:
+        counts.append(0)
+    return int(counts[0]), int(counts[1])
+
+
+def player_deck_counts(current: Any) -> tuple[int, int]:
+    players = tuple(getattr(current, "players", ()) or ())
+    counts = [int(getattr(player, "deckCount", 0)) for player in players[:2]]
+    while len(counts) < 2:
+        counts.append(0)
+    return int(counts[0]), int(counts[1])
+
+
+def player_prize_counts(current: Any) -> tuple[int, int]:
+    players = tuple(getattr(current, "players", ()) or ())
+    counts = [len(getattr(player, "prize", ()) or ()) for player in players[:2]]
+    while len(counts) < 2:
+        counts.append(0)
+    return int(counts[0]), int(counts[1])
 
 
 def is_game_outcome_cap_reached(node: OfficialGameBeamNode, config: GameOutcomeSearchConfig) -> bool:

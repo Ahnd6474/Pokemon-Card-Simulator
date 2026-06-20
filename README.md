@@ -27,7 +27,14 @@ tests/
   test_official_api.py
 
 benchmarks/
-  benchmark_search_api.py  local Search API beam benchmark
+  benchmark_search_api.py             local Search API beam benchmark
+  build_state_outcome_dataset.py      terminal-path outcome dataset builder
+  train_card_autoencoder.py           fixed card-info autoencoder
+  train_card_state_outcome_model.py   attention model for outcome distributions
+
+decks/
+  accepted_decks.json      filtered real deck list
+  overlap_decks.json       broader real deck list, with overlap-heavy decks
 ```
 
 ## Official API wrapper
@@ -168,6 +175,135 @@ Use `choice_filter` to remove choices that should not be counted at all, such as
 obviously non-game-like lines. `beam_width`, `max_choices_per_state`,
 `max_leaf_count`, and `max_turns` are compute caps. They are not probability
 thresholds.
+
+## State and card instance encoding
+
+Outcome training rows use two encodings:
+
+- `encode_game_state()` returns a compact numeric vector for global game state.
+- `encode_card_instances()` returns visible card-instance tokens.
+
+Card IDs stay as integers. The visible-card token schema is:
+
+```json
+{
+  "card_id": 25,
+  "owner": 0,
+  "zone": 1,
+  "slot": 0,
+  "attached_to_card_id": 0,
+  "known": 1,
+  "dynamic": [0.1, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+}
+```
+
+`owner`, `zone`, `slot`, attachment relation, HP/damage, attached energy count,
+evolution depth, and status flags are treated as game-state features. They are
+not part of the fixed card autoencoder.
+
+## Terminal outcome dataset
+
+`benchmarks/build_state_outcome_dataset.py` builds supervised rows from real deck
+JSON files. It samples official games, opens Search API states, runs
+`beam_search_game_outcome_distribution()`, and keeps only branches that reached
+a terminal result. For each terminal branch it also stores the intermediate
+states on that branch, so training is not limited to opening positions.
+
+The target is a 49-way distribution over final point tuples:
+
+```text
+(self_points, opponent_points), each from 0..6
+```
+
+Example smoke run:
+
+```powershell
+$env:PYTHONPATH='src'
+$env:PYTHONIOENCODING='utf-8'
+python benchmarks\build_state_outcome_dataset.py `
+  --max-decks 4 `
+  --games 2 `
+  --snapshots 2 `
+  --seed 21 `
+  --beam-width 64 `
+  --search-steps 256 `
+  --max-choices 16 `
+  --ranking-profile terminal-stats `
+  --terminal-stats-in benchmarks\terminal_reachability_profile_seeds_1_10_64x384.json `
+  --out benchmarks\state_outcome_terminal_paths_smoke.jsonl `
+  --meta-out benchmarks\state_outcome_terminal_paths_smoke.meta.json
+```
+
+Recent smoke result:
+
+```text
+rows=78 skipped_no_terminal=2 decks=4 elapsed=11.063s
+```
+
+## Card AE and outcome model
+
+The card autoencoder learns fixed card information only: card type, energy type,
+weakness, resistance, rule flags such as EX/Mega EX/Tera/ACE SPEC, HP, retreat,
+skills, and attack-cost/damage summaries. `None` is encoded as its own category
+for fields where absence matters, including energy type, weakness, and
+resistance.
+
+```powershell
+$env:PYTHONPATH='src'
+$env:PYTHONIOENCODING='utf-8'
+python benchmarks\train_card_autoencoder.py --dim 32 --epochs 2000 --lr 0.02 --seed 1 --out benchmarks\card_autoencoder_dim32.json
+```
+
+Current 32-dim AE result:
+
+```text
+cards=1267 features=44 dim=32
+holdout normalized_mse=0.32565162
+holdout numeric_mse=0.00828639
+holdout binary_accuracy=0.960474
+holdout categorical_accuracy:
+  card_type=0.984190
+  energy_type=0.952569
+  weakness=0.964427
+  resistance=1.000000
+```
+
+The outcome model loads the AE embedding table, then adds game-state embeddings
+for owner, zone, slot, attached-to card, and dynamic card features. A Transformer
+encoder attends over deck tokens and visible-card tokens. The loss is soft-label
+cross entropy against the 49-way terminal outcome distribution. Card embeddings
+are initialized from the AE output and remain trainable in the outcome model.
+Card IDs that are not present in the AE table are mapped to trainable unknown
+card id `0`.
+
+```powershell
+$env:PYTHONPATH='src'
+$env:PYTHONIOENCODING='utf-8'
+python benchmarks\train_card_state_outcome_model.py `
+  --dataset benchmarks\state_outcome_terminal_paths_smoke.jsonl `
+  --meta benchmarks\state_outcome_terminal_paths_smoke.meta.json `
+  --card-ae benchmarks\card_autoencoder_dim32.json `
+  --epochs 2 `
+  --batch-size 8 `
+  --hidden-dim 64 `
+  --layers 1 `
+  --heads 4 `
+  --out benchmarks\card_state_outcome_model_smoke.json `
+  --weights-out benchmarks\card_state_outcome_model_smoke.pt
+```
+
+Recent smoke result:
+
+```text
+rows=78 train=62 holdout=16
+holdout distribution_mae=0.035871
+holdout expected_self_mae=2.827043
+holdout expected_opponent_mae=2.620400
+```
+
+This smoke dataset is too small for model quality claims. It only verifies that
+the terminal-path dataset, card AE embeddings, attention body, and CE loss run
+together.
 
 ## Search API benchmark
 

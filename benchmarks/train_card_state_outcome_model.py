@@ -23,6 +23,7 @@ def main() -> None:
     parser.add_argument("--meta", default="benchmarks/state_outcome_terminal_paths_smoke.meta.json")
     parser.add_argument("--card-ae", default="benchmarks/card_autoencoder_dim16.json")
     parser.add_argument("--out", default="benchmarks/card_state_outcome_model.json")
+    parser.add_argument("--weights-out", default="benchmarks/card_state_outcome_model.pt")
     parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--lr", type=float, default=0.001)
@@ -81,15 +82,42 @@ def main() -> None:
         "heads": args.heads,
         "slot_count": args.slot_count,
         "rows": len(rows),
+        "card_embedding_trainable": True,
+        "unknown_card_id": 0,
+        "weights_out": args.weights_out,
         "train": train_metrics,
         "holdout": holdout_metrics,
     }
     out_path = ROOT / args.out
     out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    weights_path = ROOT / args.weights_out
+    weights_path.parent.mkdir(parents=True, exist_ok=True)
+    torch.save(
+        {
+            "kind": payload["kind"],
+            "points": POINTS,
+            "model_state": model.state_dict(),
+            "config": {
+                "card_ae": args.card_ae,
+                "hidden_dim": args.hidden_dim,
+                "layers": args.layers,
+                "heads": args.heads,
+                "slot_count": args.slot_count,
+                "owner_count": 2,
+                "zone_count": 1 + len(meta["card_zone_names"]),
+                "dynamic_dim": len(meta["card_instance_feature_names"]),
+                "global_dim": len(meta["state_feature_names"]),
+                "unknown_card_id": 0,
+            },
+            "metrics": {"train": train_metrics, "holdout": holdout_metrics},
+        },
+        weights_path,
+    )
     print(f"rows={len(rows)} train={len(train_rows)} holdout={len(holdout_rows)}")
     print("train", train_metrics)
     print("holdout", holdout_metrics)
     print(f"wrote {out_path}")
+    print(f"wrote {weights_path}")
 
 
 class OutcomeDataset(Dataset):
@@ -169,8 +197,11 @@ class CardStateOutcomeModel(nn.Module):
         card_dim = card_embedding.shape[1]
         if card_dim % heads != 0:
             raise ValueError("card embedding dimension must be divisible by attention heads")
-        self.card = nn.Embedding.from_pretrained(card_embedding, freeze=False, padding_idx=0)
-        self.attached_to_card = nn.Embedding.from_pretrained(card_embedding.clone(), freeze=False, padding_idx=0)
+        known_card_ids = card_embedding.abs().sum(dim=1) > 0
+        known_card_ids[0] = True
+        self.register_buffer("known_card_ids", known_card_ids)
+        self.card = nn.Embedding.from_pretrained(card_embedding, freeze=False)
+        self.attached_to_card = nn.Embedding.from_pretrained(card_embedding.clone(), freeze=False)
         self.owner = nn.Embedding(owner_count, card_dim)
         self.zone = nn.Embedding(zone_count, card_dim)
         self.slot = nn.Embedding(slot_count, card_dim)
@@ -193,8 +224,8 @@ class CardStateOutcomeModel(nn.Module):
         )
 
     def forward(self, batch: dict[str, torch.Tensor]) -> torch.Tensor:
-        card_id = batch["card_id"].clamp(0, self.card.num_embeddings - 1)
-        attached_to_card_id = batch["attached_to_card_id"].clamp(0, self.attached_to_card.num_embeddings - 1)
+        card_id = self.safe_card_id(batch["card_id"])
+        attached_to_card_id = self.safe_card_id(batch["attached_to_card_id"])
         token_vector = (
             self.card(card_id)
             + self.attached_to_card(attached_to_card_id)
@@ -214,6 +245,12 @@ class CardStateOutcomeModel(nn.Module):
         )
         encoded = self.encoder(sequence, src_key_padding_mask=padding_mask)
         return torch.softmax(self.head(encoded[:, 0]), dim=1)
+
+    def safe_card_id(self, card_id: torch.Tensor) -> torch.Tensor:
+        in_range = (card_id >= 0) & (card_id < self.card.num_embeddings)
+        clamped = card_id.clamp(0, self.card.num_embeddings - 1)
+        known = self.known_card_ids[clamped] & in_range
+        return torch.where(known, clamped, torch.zeros_like(clamped))
 
 
 def collate_batch(rows: list[dict[str, Any]]) -> dict[str, torch.Tensor]:
