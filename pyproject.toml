@@ -1,0 +1,9 @@
+[project]
+name = "pokemon-card-simulator"
+version = "0.1.0"
+description = "Compact Pokemon TCG state transition and outcome estimation tools"
+requires-python = ">=3.12"
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+
