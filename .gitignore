@@ -8,6 +8,28 @@ benchmarks/*.stdout.log
 benchmarks/*.stderr.log
 benchmarks/tensorboard/
 benchmarks/*.game*.pt
+benchmarks/*.epoch*.pt
+
+# Disposable validation runs.
+benchmarks/*smoke*.json
+benchmarks/*smoke*.jsonl
+benchmarks/*smoke*.meta.json
+benchmarks/*smoke*.pt
+
+# Large generated training corpora and derived bucket datasets. Keep these
+# locally unless a specific reproducibility dataset is force-included below.
+benchmarks/rule_agent_bootstrap_*.jsonl
+benchmarks/rule_agent_bootstrap_*.meta.json
+benchmarks/*bucketed*.jsonl
+benchmarks/*bucketed*.meta.json
+benchmarks/mixed_qdvn_rule_*.jsonl
+benchmarks/mixed_qdvn_rule_*.meta.json
+benchmarks/qdvn_selfplay_*.jsonl
+benchmarks/qdvn_selfplay_*.meta.json
+
+# Online trajectories and the currently running layer-depth experiment.
+benchmarks/online_qdvn_*.jsonl
+benchmarks/online_qdvn_layer3_*
 
 # Generated datasets and checkpoints are local by default. The reproducible
 # bootstrap data and selected generation checkpoints are included below.
