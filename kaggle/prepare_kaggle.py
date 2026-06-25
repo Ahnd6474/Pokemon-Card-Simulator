@@ -38,7 +38,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--username", required=True, help="Kaggle account username")
     parser.add_argument("--dataset-slug", default="pokemon-card-simulator-runtime")
-    parser.add_argument("--kernel-slug", default="pokemon-card-simulator-q-dvn-v9")
+    parser.add_argument("--kernel-slug", default="pokemon-card-simulator-q-dvn-v9-v11")
     args = parser.parse_args()
 
     build_runtime_dataset(args.username, args.dataset_slug)

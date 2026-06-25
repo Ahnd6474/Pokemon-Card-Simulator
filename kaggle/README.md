@@ -51,3 +51,5 @@ The loss remains utility-shift Huber with `old=0.3` and `terminal=0.7`; terminal
 distribution CE is not used. Kaggle stores each generation checkpoint, summary
 JSON, the final run summary, and TensorBoard events under
 `/kaggle/working/qdvn-v9-v11-output`.
+
+Progress: https://www.kaggle.com/code/dannyahn/pokemon-card-simulator-q-dvn-v9-v11
