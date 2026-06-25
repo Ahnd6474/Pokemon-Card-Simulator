@@ -7,6 +7,7 @@ import json
 import random
 import sys
 import time
+import warnings
 from collections import Counter
 from pathlib import Path
 from types import ModuleType
@@ -301,13 +302,13 @@ def main() -> None:
     }
     out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     if writer is not None:
-        writer.add_scalar("run/games_completed", games_completed, len(matchups))
-        writer.add_scalar("run/rows_seen", rows_seen, len(matchups))
-        writer.add_scalar("run/updates", update_step, len(matchups))
+        safe_writer_call(writer.add_scalar, "run/games_completed", games_completed, len(matchups))
+        safe_writer_call(writer.add_scalar, "run/rows_seen", rows_seen, len(matchups))
+        safe_writer_call(writer.add_scalar, "run/updates", update_step, len(matchups))
         if payload["metrics_recent"] is not None:
             write_metrics(writer, "final_recent", payload["metrics_recent"], len(matchups))
-        writer.flush()
-        writer.close()
+        safe_writer_call(writer.flush)
+        safe_writer_call(writer.close)
     print(
         json.dumps(
             {
@@ -643,15 +644,29 @@ def make_summary_writer(args: argparse.Namespace) -> SummaryWriter | None:
         return None
     run_name = args.run_name or f"generation_{args.generation}"
     logdir = ROOT / args.tensorboard_logdir / run_name
-    writer = SummaryWriter(str(logdir))
-    writer.add_text("config/weights", args.weights, 0)
-    writer.add_text("config/run_name", run_name, 0)
-    writer.add_scalar("config/generation", args.generation, 0)
-    writer.add_scalar("config/old_shift_loss_weight", args.old_shift_loss_weight, 0)
-    writer.add_scalar("config/terminal_shift_loss_weight", args.terminal_shift_loss_weight, 0)
-    writer.add_scalar("config/epsilon", args.epsilon, 0)
-    writer.add_scalar("config/temperature", args.temperature, 0)
+    try:
+        logdir.mkdir(parents=True, exist_ok=True)
+        writer = SummaryWriter(str(logdir))
+    except (OSError, RuntimeError) as exc:
+        warnings.warn(f"TensorBoard logging disabled: {exc}", RuntimeWarning)
+        return None
+    safe_writer_call(writer.add_text, "config/weights", args.weights, 0)
+    safe_writer_call(writer.add_text, "config/run_name", run_name, 0)
+    safe_writer_call(writer.add_scalar, "config/generation", args.generation, 0)
+    safe_writer_call(writer.add_scalar, "config/old_shift_loss_weight", args.old_shift_loss_weight, 0)
+    safe_writer_call(writer.add_scalar, "config/terminal_shift_loss_weight", args.terminal_shift_loss_weight, 0)
+    safe_writer_call(writer.add_scalar, "config/epsilon", args.epsilon, 0)
+    safe_writer_call(writer.add_scalar, "config/temperature", args.temperature, 0)
     return writer
+
+
+def safe_writer_call(function: Any, *args: Any) -> bool:
+    try:
+        function(*args)
+        return True
+    except (OSError, RuntimeError) as exc:
+        warnings.warn(f"TensorBoard write skipped: {exc}", RuntimeWarning)
+        return False
 
 
 def write_metrics(writer: SummaryWriter | None, prefix: str, metrics: dict[str, float], step: int) -> None:
@@ -660,16 +675,21 @@ def write_metrics(writer: SummaryWriter | None, prefix: str, metrics: dict[str, 
     for key, value in metrics.items():
         if np.isnan(value):
             continue
-        writer.add_scalar(f"{prefix}/{key}", value, step)
+        safe_writer_call(writer.add_scalar, f"{prefix}/{key}", value, step)
 
 
 def write_progress(writer: SummaryWriter | None, payload: dict[str, Any], step: int) -> None:
     if writer is None:
         return
-    writer.add_scalar("progress/games_completed", payload["games_completed"], step)
-    writer.add_scalar("progress/games_skipped_nonterminal", payload["games_skipped_nonterminal"], step)
-    writer.add_scalar("progress/rows_seen", payload["rows_seen"], step)
-    writer.add_scalar("progress/elapsed_seconds", payload["elapsed_seconds"], step)
+    safe_writer_call(writer.add_scalar, "progress/games_completed", payload["games_completed"], step)
+    safe_writer_call(
+        writer.add_scalar,
+        "progress/games_skipped_nonterminal",
+        payload["games_skipped_nonterminal"],
+        step,
+    )
+    safe_writer_call(writer.add_scalar, "progress/rows_seen", payload["rows_seen"], step)
+    safe_writer_call(writer.add_scalar, "progress/elapsed_seconds", payload["elapsed_seconds"], step)
     metrics = payload.get("metrics_recent")
     if isinstance(metrics, dict):
         write_metrics(writer, "progress_recent", metrics, step)

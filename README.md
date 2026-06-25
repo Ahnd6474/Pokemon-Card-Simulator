@@ -147,6 +147,26 @@ python benchmarks\run_online_qdvn_generations.py `
   --terminal-shift-loss-weight 0.7
 ```
 
+## Kaggle GPU execution
+
+Install the Kaggle CLI and build the private runtime dataset:
+
+```powershell
+python -m pip install -e ".[kaggle]"
+python kaggle\prepare_kaggle.py --username YOUR_KAGGLE_USERNAME
+```
+
+After configuring a Kaggle API token, upload the runtime dataset and launch the
+GPU kernel:
+
+```powershell
+.\kaggle\upload.ps1 -Username YOUR_KAGGLE_USERNAME
+```
+
+The runtime upload is about 5 MB and does not include the 431 MB bootstrap
+JSONL, which online self-play does not use. See
+[`kaggle/README.md`](kaggle/README.md) for authentication and update commands.
+
 ## Metrics
 
 TensorBoard records:

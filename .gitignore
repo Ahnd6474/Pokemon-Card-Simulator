@@ -3,6 +3,9 @@
 .pytest_cache/
 __pycache__/
 *.py[cod]
+.kaggle-config/
+kaggle/staging/
+kaggle/kernel/kernel-metadata.json
 
 benchmarks/*.stdout.log
 benchmarks/*.stderr.log

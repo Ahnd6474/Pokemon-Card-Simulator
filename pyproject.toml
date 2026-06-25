@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "Compact Pokemon TCG state transition and outcome estimation tools"
 requires-python = ">=3.12"
 
+[project.optional-dependencies]
+kaggle = ["kaggle>=2.2,<3"]
+
 [tool.pytest.ini_options]
 pythonpath = ["src"]
-
