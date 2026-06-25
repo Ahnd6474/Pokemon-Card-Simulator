@@ -1,4 +1,4 @@
-"""Run the three-layer Q-DVN generation on a Kaggle GPU."""
+"""Run Q-DVN generations v9 through v11 on a Kaggle GPU."""
 
 from __future__ import annotations
 
@@ -16,7 +16,7 @@ from pathlib import Path
 INPUT_ROOT = Path(os.environ.get("KAGGLE_INPUT_ROOT", "/kaggle/input"))
 WORKING_ROOT = Path(os.environ.get("KAGGLE_WORKING_ROOT", "/kaggle/working"))
 REPO_ROOT = WORKING_ROOT / "pokemon-card-simulator"
-OUTPUT_ROOT = WORKING_ROOT / "qdvn-v9-output"
+OUTPUT_ROOT = WORKING_ROOT / "qdvn-v9-v11-output"
 EMBEDDED_RUNTIME_B85 = ""
 
 
@@ -35,20 +35,31 @@ def main() -> None:
     OUTPUT_ROOT.mkdir(parents=True, exist_ok=True)
 
     max_games = os.environ.get("QDVN_MAX_GAMES", "0")
+    workers = os.environ.get("QDVN_WORKERS", "4")
+    epochs = os.environ.get("QDVN_EPOCHS", "4")
+    batch_size = os.environ.get("QDVN_BATCH_SIZE", "1024")
     device = resolve_device(os.environ.get("QDVN_DEVICE", "cuda"))
     command = [
         sys.executable,
-        "benchmarks/train_online_qdvn_selfplay.py",
-        "--weights",
+        "benchmarks/run_parallel_qdvn_generations.py",
+        "--initial-weights",
         "benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v8.pt",
         "--meta",
         "benchmarks/microaction_dvn_bootstrap_v0_10mpm.meta.json",
         "--card-ae",
         "benchmarks/card_autoencoder_dim16_smoke.json",
-        "--games-per-matchup",
+        "--start-generation",
+        "9",
+        "--generations",
+        "3",
+        "--workers",
+        workers,
+        "--cpu-threads-per-worker",
         "1",
         "--max-games",
         max_games,
+        "--games-per-matchup",
+        "1",
         "--max-steps",
         "700",
         "--max-choices",
@@ -63,32 +74,21 @@ def main() -> None:
         "0.7",
         "--current-layers",
         "3",
-        "--updates-per-game",
-        "2",
+        "--epochs",
+        epochs,
         "--batch-size",
-        "256",
-        "--min-replay-rows",
-        "256",
-        "--replay-max-rows",
-        "100000",
+        batch_size,
         "--progress-every",
         "25",
-        "--checkpoint-every",
-        "100",
+        "--output-dir",
+        str(OUTPUT_ROOT),
         "--tensorboard-logdir",
         str(OUTPUT_ROOT / "tensorboard"),
-        "--run-name",
-        "online_qdvn_layer3_old03_term07_v9_gen9",
-        "--generation",
-        "9",
         "--seed",
         "5001",
         "--device",
         device,
-        "--out",
-        str(OUTPUT_ROOT / "online_qdvn_layer3_old03_term07_v9.json"),
-        "--weights-out",
-        str(OUTPUT_ROOT / "online_qdvn_layer3_old03_term07_v9.pt"),
+        "--amp",
     ]
     print("running:", subprocess.list2cmdline(command), flush=True)
     subprocess.run(command, cwd=REPO_ROOT, check=True)

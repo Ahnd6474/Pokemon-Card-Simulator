@@ -76,6 +76,8 @@ def main() -> None:
     parser.add_argument("--include-rule-participants", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--games-per-matchup", type=int, default=1)
     parser.add_argument("--max-games", type=int, default=0)
+    parser.add_argument("--matchup-shard-count", type=int, default=1)
+    parser.add_argument("--matchup-shard-index", type=int, default=0)
     parser.add_argument("--shuffle-matchups", action=argparse.BooleanOptionalAction, default=True)
     parser.add_argument("--max-steps", type=int, default=700)
     parser.add_argument("--max-choices", type=int, default=24)
@@ -101,7 +103,15 @@ def main() -> None:
     parser.add_argument("--out", default="benchmarks/online_qdvn_selfplay.json")
     parser.add_argument("--weights-out", default="benchmarks/online_qdvn_selfplay.pt")
     parser.add_argument("--trajectory-out", default="")
+    parser.add_argument("--collect-only", action="store_true")
     args = parser.parse_args()
+
+    if args.matchup_shard_count < 1:
+        parser.error("--matchup-shard-count must be at least 1")
+    if not 0 <= args.matchup_shard_index < args.matchup_shard_count:
+        parser.error("--matchup-shard-index must be in [0, --matchup-shard-count)")
+    if args.collect_only and not args.trajectory_out:
+        parser.error("--collect-only requires --trajectory-out")
 
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -127,6 +137,7 @@ def main() -> None:
         rng.shuffle(matchups)
     if args.max_games > 0:
         matchups = matchups[: args.max_games]
+    matchups = matchups[args.matchup_shard_index :: args.matchup_shard_count]
     if not matchups:
         raise RuntimeError("at least one matchup is required")
 
@@ -139,7 +150,7 @@ def main() -> None:
         epsilon=0.0,
         margin_weight=args.margin_weight,
         max_choices=args.max_choices,
-        seed=args.seed,
+        seed=args.seed + args.matchup_shard_index * 10_000,
     )
     current_critic = QDvnPolicy(
         weights_path=ROOT / args.weights,
@@ -150,7 +161,7 @@ def main() -> None:
         epsilon=args.epsilon,
         margin_weight=args.margin_weight,
         max_choices=args.max_choices,
-        seed=args.seed + 1,
+        seed=args.seed + args.matchup_shard_index * 10_000 + 1,
         layers_override=args.current_layers or None,
     )
     train_adapter = OutcomeDataset([], current_critic.meta, current_critic.slot_count, "terminal_only")
@@ -191,6 +202,7 @@ def main() -> None:
                 game_index,
                 max_steps=args.max_steps,
                 include_setup=args.include_setup,
+                reuse_current_as_target=args.collect_only,
             )
             matchup = f"{left.name}_vs_{right.name}"
             if terminal_obs is None:
@@ -204,6 +216,7 @@ def main() -> None:
             matchup_counts[matchup] += 1
             player_decks = (left.deck, right.deck)
             episode_rows: list[dict[str, Any]] = []
+            episode_points: list[tuple[int, int]] = []
             for state_index, record in enumerate(records):
                 player_id = int(record.observation.current.yourIndex)
                 opponent_id = 1 - player_id
@@ -226,15 +239,18 @@ def main() -> None:
                     store_legal_options=False,
                     store_after_input=True,
                 )
-                add_shift_targets(row, record, point, target_critic)
                 episode_rows.append(row)
+                episode_points.append(point)
+            add_shift_targets_batch(episode_rows, records, episode_points, target_critic)
+            for row in episode_rows:
                 if trajectory_file is not None:
                     trajectory_file.write(json.dumps(row, separators=(",", ":")) + "\n")
-            replay.extend(episode_rows)
             rows_seen += len(episode_rows)
-            if len(replay) > args.replay_max_rows:
-                replay = replay[-args.replay_max_rows :]
-            if len(replay) >= args.min_replay_rows:
+            if not args.collect_only:
+                replay.extend(episode_rows)
+                if len(replay) > args.replay_max_rows:
+                    replay = replay[-args.replay_max_rows :]
+            if not args.collect_only and len(replay) >= args.min_replay_rows:
                 for _ in range(args.updates_per_game):
                     update_step += 1
                     metrics = train_online_batch(
@@ -260,7 +276,11 @@ def main() -> None:
                 )
                 print(json.dumps(progress), flush=True)
                 write_progress(writer, progress, game_index + 1)
-            if args.checkpoint_every > 0 and (game_index + 1) % args.checkpoint_every == 0:
+            if (
+                not args.collect_only
+                and args.checkpoint_every > 0
+                and (game_index + 1) % args.checkpoint_every == 0
+            ):
                 save_online_checkpoint(
                     epoch=game_index + 1,
                     path=weights_path.with_name(f"{weights_path.stem}.game{game_index + 1}{weights_path.suffix}"),
@@ -274,7 +294,8 @@ def main() -> None:
         __import__("shutil").rmtree(workspace, ignore_errors=True)
 
     elapsed = time.perf_counter() - started
-    save_online_checkpoint(epoch=len(matchups), path=weights_path, critic=current_critic, optimizer=optimizer, args=args)
+    if not args.collect_only:
+        save_online_checkpoint(epoch=len(matchups), path=weights_path, critic=current_critic, optimizer=optimizer, args=args)
     payload = {
         "kind": "online-qdvn-selfplay-v1",
         "source_weights": args.weights,
@@ -293,7 +314,8 @@ def main() -> None:
         "participant_count": len(participants),
         "deck_count": len(decks),
         "target_critic_frozen": True,
-        "policy_critic_online_updated": True,
+        "policy_critic_online_updated": not args.collect_only,
+        "collect_only": args.collect_only,
         "loss": "distribution_shift_only",
         "generation": args.generation,
         "run_name": args.run_name,
@@ -322,7 +344,8 @@ def main() -> None:
         flush=True,
     )
     print(f"wrote {out_path}", flush=True)
-    print(f"wrote {weights_path}", flush=True)
+    if not args.collect_only:
+        print(f"wrote {weights_path}", flush=True)
 
 
 def play_online_game(
@@ -337,6 +360,7 @@ def play_online_game(
     *,
     max_steps: int,
     include_setup: bool,
+    reuse_current_as_target: bool = False,
 ) -> tuple[list[QDvnRecord], Any | None, int | None]:
     obs_dict, _start_data = game.battle_start(list(left.deck.cards), list(right.deck.cards))
     records: list[QDvnRecord] = []
@@ -359,17 +383,20 @@ def play_online_game(
                     raise RuntimeError(f"missing runtime agent for {participant.name}")
                 action = normalize_action(runtime_agent.agent(obs_dict), obs.select)
             else:
-                action, _current_distribution, _current_utility = current_critic.select_action(
+                action, current_distribution, current_utility = current_critic.select_action(
                     obs,
                     self_deck=decks[player_id],
                     opponent_deck=decks[opponent_id],
                 )
-            old_distribution, old_utility = target_critic.evaluate_action(
-                obs,
-                self_deck=decks[player_id],
-                opponent_deck=decks[opponent_id],
-                action=action,
-            )
+            if participant.policy_type != "rule" and reuse_current_as_target:
+                old_distribution, old_utility = current_distribution, current_utility
+            else:
+                old_distribution, old_utility = target_critic.evaluate_action(
+                    obs,
+                    self_deck=decks[player_id],
+                    opponent_deck=decks[opponent_id],
+                    action=action,
+                )
             next_obs_dict = game.battle_select(action)
             next_obs = api.to_observation_class(next_obs_dict)
             if is_decision_state(obs, include_setup=include_setup):
@@ -421,6 +448,41 @@ def add_shift_targets(row: dict[str, Any], record: QDvnRecord, point: tuple[int,
         "terminal_utility_shift": terminal_utility - before_utility,
         "terminal_utility": terminal_utility,
     }
+
+
+def add_shift_targets_batch(
+    rows: list[dict[str, Any]],
+    records: list[QDvnRecord],
+    points: list[tuple[int, int]],
+    target_critic: QDvnPolicy,
+) -> None:
+    if not rows:
+        return
+    if not (len(rows) == len(records) == len(points)):
+        raise ValueError("rows, records, and points must have equal lengths")
+    items = [target_critic.dataset.row_to_item(before_baseline_row(row)) for row in rows]
+    batch = move_batch(collate_batch(items), target_critic.device)
+    with torch.no_grad():
+        before_arrays = target_critic.model(batch).cpu().numpy()
+    for row, record, point, before_array in zip(rows, records, points, before_arrays, strict=True):
+        before_distribution = target_critic.distribution_dict(before_array)
+        before_utility = target_critic.utility(before_array)
+        action_distribution = dict(record.old_dvn_distribution)
+        action_utility = float(record.old_dvn_utility)
+        terminal_utility = score_utility(point, target_critic.margin_weight)
+        row["target"]["old_dvn_before"] = {
+            "point_probabilities": before_distribution,
+            "utility": before_utility,
+        }
+        row["target"]["old_dvn_action"] = {
+            "point_probabilities": action_distribution,
+            "utility": action_utility,
+        }
+        row["target"]["shift"] = {
+            "old_dvn_utility_shift": action_utility - before_utility,
+            "terminal_utility_shift": terminal_utility - before_utility,
+            "terminal_utility": terminal_utility,
+        }
 
 
 def evaluate_state_distribution(

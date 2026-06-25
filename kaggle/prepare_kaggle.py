@@ -27,8 +27,10 @@ BENCHMARK_FILES = (
     "build_qdvn_selfplay_microaction_dataset.py",
     "build_rule_agent_bootstrap_dataset.py",
     "build_state_outcome_dataset.py",
+    "run_parallel_qdvn_generations.py",
     "train_card_state_outcome_model.py",
     "train_online_qdvn_selfplay.py",
+    "train_qdvn_shift_replay.py",
 )
 
 
@@ -101,7 +103,7 @@ def build_kernel_metadata(username: str, dataset_slug: str, kernel_slug: str) ->
     KERNEL_ROOT.mkdir(parents=True, exist_ok=True)
     metadata = {
         "id": f"{username}/{kernel_slug}",
-        "title": "Pokemon Card Simulator Q DVN v9",
+        "title": "Pokemon Card Simulator Q DVN v9-v11",
         "code_file": "run_online_qdvn_generated.py",
         "language": "python",
         "kernel_type": "script",

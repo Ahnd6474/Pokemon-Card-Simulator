@@ -44,7 +44,10 @@ JSONL is intentionally excluded because online self-play does not read it.
 .\kaggle\upload.ps1 -Username YOUR_KAGGLE_USERNAME
 ```
 
-The kernel starts v9 from the completed v8 checkpoint with three Transformer
-layers, CUDA, `old=0.3`, and `terminal=0.7`. Kaggle stores the final checkpoint,
-summary JSON, periodic checkpoints, and TensorBoard events under
-`/kaggle/working/qdvn-v9-output`.
+The kernel runs v9, v10, and v11 sequentially from the completed v8 checkpoint.
+Each generation uses four CPU processes for disjoint self-play matchup shards,
+then trains the three-layer model on the T4 with AMP and batch size 1024.
+The loss remains utility-shift Huber with `old=0.3` and `terminal=0.7`; terminal
+distribution CE is not used. Kaggle stores each generation checkpoint, summary
+JSON, the final run summary, and TensorBoard events under
+`/kaggle/working/qdvn-v9-v11-output`.
