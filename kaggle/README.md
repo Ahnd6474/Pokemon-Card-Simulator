@@ -1,7 +1,8 @@
 # Kaggle execution
 
-This directory packages the online Q-DVN run as a private Kaggle dataset and a
-GPU script kernel.
+This directory packages the online Q-DVN run as a GPU script kernel. The runtime
+bundle is embedded into the generated kernel file, so Kaggle dataset permissions
+are not required.
 
 ## 1. Configure authentication
 
@@ -29,11 +30,11 @@ directory explicitly:
 This creates:
 
 ```text
-kaggle/staging/runtime/   private runtime dataset
-kaggle/kernel/            GPU kernel and generated metadata
+kaggle/staging/runtime/                  inspectable runtime dataset
+kaggle/kernel/run_online_qdvn_generated.py  self-contained GPU kernel
 ```
 
-The runtime dataset is small. It contains the simulator, source code, 33 decks,
+The embedded runtime is small. It contains the simulator, source code, 33 decks,
 four rule agents, card features, and the v8 checkpoint. The 431 MB bootstrap
 JSONL is intentionally excluded because online self-play does not read it.
 
@@ -41,12 +42,6 @@ JSONL is intentionally excluded because online self-play does not read it.
 
 ```powershell
 .\kaggle\upload.ps1 -Username YOUR_KAGGLE_USERNAME
-```
-
-For later runtime dataset updates:
-
-```powershell
-.\kaggle\upload.ps1 -Username YOUR_KAGGLE_USERNAME -VersionDataset
 ```
 
 The kernel starts v9 from the completed v8 checkpoint with three Transformer

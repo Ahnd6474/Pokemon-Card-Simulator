@@ -6,6 +6,9 @@ __pycache__/
 .kaggle-config/
 kaggle/staging/
 kaggle/kernel/kernel-metadata.json
+kaggle/kernel/run_online_qdvn_generated.py
+kaggle/kernel-output*/
+kaggle/local-smoke-*/
 
 benchmarks/*.stdout.log
 benchmarks/*.stderr.log

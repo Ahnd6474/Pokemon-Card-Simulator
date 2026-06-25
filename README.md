@@ -149,15 +149,14 @@ python benchmarks\run_online_qdvn_generations.py `
 
 ## Kaggle GPU execution
 
-Install the Kaggle CLI and build the private runtime dataset:
+Install the Kaggle CLI and build the self-contained runtime bundle:
 
 ```powershell
 python -m pip install -e ".[kaggle]"
 python kaggle\prepare_kaggle.py --username YOUR_KAGGLE_USERNAME
 ```
 
-After configuring a Kaggle API token, upload the runtime dataset and launch the
-GPU kernel:
+After configuring a Kaggle API token, upload and launch the GPU kernel:
 
 ```powershell
 .\kaggle\upload.ps1 -Username YOUR_KAGGLE_USERNAME
