@@ -1,0 +1,5 @@
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.pt filter=lfs diff=lfs merge=lfs -text
+*.dll filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+benchmarks/microaction_dvn_bootstrap_v0_10mpm.jsonl filter=lfs diff=lfs merge=lfs -text

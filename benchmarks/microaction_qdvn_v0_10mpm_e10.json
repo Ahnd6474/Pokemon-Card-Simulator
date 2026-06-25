@@ -1,0 +1,413 @@
+{
+  "kind": "split-deck-board-action-final-point-distribution-v1",
+  "points": [
+    [
+      0,
+      0
+    ],
+    [
+      0,
+      1
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      3
+    ],
+    [
+      0,
+      4
+    ],
+    [
+      0,
+      5
+    ],
+    [
+      0,
+      6
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      1,
+      4
+    ],
+    [
+      1,
+      5
+    ],
+    [
+      1,
+      6
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      2,
+      2
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      2,
+      4
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      3,
+      5
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      5,
+      3
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      6,
+      0
+    ],
+    [
+      6,
+      1
+    ],
+    [
+      6,
+      2
+    ],
+    [
+      6,
+      3
+    ],
+    [
+      6,
+      4
+    ],
+    [
+      6,
+      5
+    ],
+    [
+      6,
+      6
+    ]
+  ],
+  "card_ae": "benchmarks/card_autoencoder_dim16_smoke.json",
+  "hidden_dim": 64,
+  "layers": 1,
+  "heads": 4,
+  "slot_count": 80,
+  "action_dim": 20,
+  "rows": 25239,
+  "max_rows": 0,
+  "device": "cpu",
+  "epochs_requested": 10,
+  "start_epoch": 0,
+  "end_epoch": 10,
+  "resume_from": "",
+  "epoch_history": [
+    {
+      "epoch": 1,
+      "train_loss": 3.076509,
+      "seconds": 75.378,
+      "holdout": {
+        "cross_entropy": 2.43454,
+        "perplexity": 11.410568,
+        "top1_accuracy": 0.110143,
+        "brier_score": 0.909157,
+        "distribution_mae": 0.036881,
+        "expected_self_mae": 1.634897,
+        "expected_opponent_mae": 1.927546,
+        "self_higher_rate_mae": 0.490401,
+        "opponent_higher_rate_mae": 0.490331,
+        "draw_rate_mae": 0.000652
+      }
+    },
+    {
+      "epoch": 2,
+      "train_loss": 2.377005,
+      "seconds": 85.865,
+      "holdout": {
+        "cross_entropy": 2.357459,
+        "perplexity": 10.564075,
+        "top1_accuracy": 0.169374,
+        "brier_score": 0.893072,
+        "distribution_mae": 0.036584,
+        "expected_self_mae": 1.677361,
+        "expected_opponent_mae": 1.921455,
+        "self_higher_rate_mae": 0.489076,
+        "opponent_higher_rate_mae": 0.489068,
+        "draw_rate_mae": 9.5e-05
+      }
+    },
+    {
+      "epoch": 3,
+      "train_loss": 2.327099,
+      "seconds": 77.453,
+      "holdout": {
+        "cross_entropy": 2.289368,
+        "perplexity": 9.868696,
+        "top1_accuracy": 0.229002,
+        "brier_score": 0.875399,
+        "distribution_mae": 0.036001,
+        "expected_self_mae": 1.662682,
+        "expected_opponent_mae": 1.850992,
+        "self_higher_rate_mae": 0.478364,
+        "opponent_higher_rate_mae": 0.47836,
+        "draw_rate_mae": 6.7e-05
+      }
+    },
+    {
+      "epoch": 4,
+      "train_loss": 2.252642,
+      "seconds": 85.776,
+      "holdout": {
+        "cross_entropy": 2.210541,
+        "perplexity": 9.120649,
+        "top1_accuracy": 0.260895,
+        "brier_score": 0.854928,
+        "distribution_mae": 0.035224,
+        "expected_self_mae": 1.605401,
+        "expected_opponent_mae": 1.732348,
+        "self_higher_rate_mae": 0.446207,
+        "opponent_higher_rate_mae": 0.446208,
+        "draw_rate_mae": 6.3e-05
+      }
+    },
+    {
+      "epoch": 5,
+      "train_loss": 2.168928,
+      "seconds": 86.815,
+      "holdout": {
+        "cross_entropy": 2.122381,
+        "perplexity": 8.350998,
+        "top1_accuracy": 0.290808,
+        "brier_score": 0.834128,
+        "distribution_mae": 0.03441,
+        "expected_self_mae": 1.479344,
+        "expected_opponent_mae": 1.580247,
+        "self_higher_rate_mae": 0.402999,
+        "opponent_higher_rate_mae": 0.403009,
+        "draw_rate_mae": 7.7e-05
+      }
+    },
+    {
+      "epoch": 6,
+      "train_loss": 2.075133,
+      "seconds": 79.779,
+      "holdout": {
+        "cross_entropy": 2.025402,
+        "perplexity": 7.57916,
+        "top1_accuracy": 0.322702,
+        "brier_score": 0.813545,
+        "distribution_mae": 0.03369,
+        "expected_self_mae": 1.388868,
+        "expected_opponent_mae": 1.431692,
+        "self_higher_rate_mae": 0.369581,
+        "opponent_higher_rate_mae": 0.369594,
+        "draw_rate_mae": 6.1e-05
+      }
+    },
+    {
+      "epoch": 7,
+      "train_loss": 1.980338,
+      "seconds": 79.588,
+      "holdout": {
+        "cross_entropy": 1.930294,
+        "perplexity": 6.891533,
+        "top1_accuracy": 0.350634,
+        "brier_score": 0.790708,
+        "distribution_mae": 0.032851,
+        "expected_self_mae": 1.312798,
+        "expected_opponent_mae": 1.333195,
+        "self_higher_rate_mae": 0.343531,
+        "opponent_higher_rate_mae": 0.343543,
+        "draw_rate_mae": 4.2e-05
+      }
+    },
+    {
+      "epoch": 8,
+      "train_loss": 1.884642,
+      "seconds": 87.46,
+      "holdout": {
+        "cross_entropy": 1.835425,
+        "perplexity": 6.267798,
+        "top1_accuracy": 0.372821,
+        "brier_score": 0.761946,
+        "distribution_mae": 0.031753,
+        "expected_self_mae": 1.26542,
+        "expected_opponent_mae": 1.254773,
+        "self_higher_rate_mae": 0.327136,
+        "opponent_higher_rate_mae": 0.327145,
+        "draw_rate_mae": 2.9e-05
+      }
+    },
+    {
+      "epoch": 9,
+      "train_loss": 1.788313,
+      "seconds": 84.377,
+      "holdout": {
+        "cross_entropy": 1.735181,
+        "perplexity": 5.669954,
+        "top1_accuracy": 0.41046,
+        "brier_score": 0.730634,
+        "distribution_mae": 0.030611,
+        "expected_self_mae": 1.239272,
+        "expected_opponent_mae": 1.194884,
+        "self_higher_rate_mae": 0.315559,
+        "opponent_higher_rate_mae": 0.315567,
+        "draw_rate_mae": 2.5e-05
+      }
+    },
+    {
+      "epoch": 10,
+      "train_loss": 1.694985,
+      "seconds": 78.574,
+      "holdout": {
+        "cross_entropy": 1.641871,
+        "perplexity": 5.164825,
+        "top1_accuracy": 0.440571,
+        "brier_score": 0.701185,
+        "distribution_mae": 0.029493,
+        "expected_self_mae": 1.187501,
+        "expected_opponent_mae": 1.163151,
+        "self_higher_rate_mae": 0.304648,
+        "opponent_higher_rate_mae": 0.304654,
+        "draw_rate_mae": 1.7e-05
+      }
+    }
+  ],
+  "card_embedding_trainable": true,
+  "unknown_card_id": 0,
+  "weights_out": "benchmarks/microaction_qdvn_v0_10mpm_e10.pt",
+  "train": {
+    "cross_entropy": 1.617649,
+    "perplexity": 5.041224,
+    "top1_accuracy": 0.445446,
+    "brier_score": 0.693814,
+    "distribution_mae": 0.029316,
+    "expected_self_mae": 1.148612,
+    "expected_opponent_mae": 1.139167,
+    "self_higher_rate_mae": 0.297384,
+    "opponent_higher_rate_mae": 0.297391,
+    "draw_rate_mae": 1.7e-05
+  },
+  "holdout": {
+    "cross_entropy": 1.641871,
+    "perplexity": 5.164825,
+    "top1_accuracy": 0.440571,
+    "brier_score": 0.701185,
+    "distribution_mae": 0.029493,
+    "expected_self_mae": 1.187501,
+    "expected_opponent_mae": 1.163151,
+    "self_higher_rate_mae": 0.304648,
+    "opponent_higher_rate_mae": 0.304654,
+    "draw_rate_mae": 1.7e-05
+  }
+}

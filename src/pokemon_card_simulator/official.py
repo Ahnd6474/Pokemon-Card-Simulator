@@ -11,7 +11,10 @@ from itertools import combinations
 from pathlib import Path
 from typing import Any
 
-DEFAULT_CG_ROOT = Path(__file__).resolve().parents[2] / "pokemon-tcg-ai-battle" / "sample_submission"
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+_LOCAL_CG_ROOT = _REPO_ROOT / "sample_submission"
+_LEGACY_CG_ROOT = _REPO_ROOT / "pokemon-tcg-ai-battle" / "sample_submission"
+DEFAULT_CG_ROOT = _LOCAL_CG_ROOT if _LOCAL_CG_ROOT.exists() else _LEGACY_CG_ROOT
 
 SearchChoice = tuple[int, ...]
 SelectionSequence = tuple[SearchChoice, ...]

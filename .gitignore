@@ -1,2 +1,37 @@
 .idea/
 .venv/
+.pytest_cache/
+__pycache__/
+*.py[cod]
+
+benchmarks/*.stdout.log
+benchmarks/*.stderr.log
+benchmarks/tensorboard/
+benchmarks/*.game*.pt
+
+# Generated datasets and checkpoints are local by default. The reproducible
+# bootstrap data and selected generation checkpoints are included below.
+benchmarks/*.jsonl
+!benchmarks/microaction_dvn_bootstrap_v0_10mpm.jsonl
+benchmarks/*.pt
+!benchmarks/microaction_qdvn_v0_10mpm_e10.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v1.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v2.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v3.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v4.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v5_old03_term07.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v6.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v7.pt
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v8.pt
+benchmarks/*.json
+!benchmarks/card_autoencoder_dim16_smoke.json
+!benchmarks/microaction_dvn_bootstrap_v0_10mpm.meta.json
+!benchmarks/microaction_qdvn_v0_10mpm_e10.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v1.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v2.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v3.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v4.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_v5_old03_term07.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v6.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v7.json
+!benchmarks/online_qdvn_shiftonly_diag_all_decks_rule_old03_term07_v8.json
