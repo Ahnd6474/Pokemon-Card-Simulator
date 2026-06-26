@@ -8,7 +8,8 @@ kaggle/staging/
 kaggle/kernel/kernel-metadata.json
 kaggle/kernel/run_online_qdvn_generated.py
 kaggle/kernel-output*/
-kaggle/local-smoke-*/
+kaggle/local-smoke-*
+kaggle/pulled-current/
 
 benchmarks/*.stdout.log
 benchmarks/*.stderr.log
